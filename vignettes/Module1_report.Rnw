@@ -30,7 +30,6 @@ library(Bootstrap)
 @
 
 
-
 \section{The Bootstrap}
 The bootstrap \parencite{Efron1979}, is a statistical tool which gives measures of accuracy of estimators, and can therefore be used draw inference about the parameters of the sampling distribution. It is a powerful and widely applicable tool.
 
@@ -45,7 +44,7 @@ dataset, giving bootstrap replications (resamples) $(x_1^{*(i)},\ldots,x_n^{*(i)
 
 The Bootstrap library contains a function, bootstrap, which automates the above procedure. It takes as inputs a data set (which can be a vector, matrix or dataframe), a function, FUN, which is used to obtain the statistic of interest, and the number, $B$, of bootstrap resamples required. Note that the data must be passed to FUN in one object.
 
-We now show how to use this function to replicate the example on page 37-38 of \textcite{Efron1983}, where we are interested in obtaining the bootstrap estimate of the standard error of the Pearson correlation coefficient. The Bootstrap library contains a function, , which calculates the Pearson correlation coefficient between the first and second columns of a matrix or dataframe.
+We now show how to use this function to replicate the example on page 37-38 of \textcite{Efron1983}, where we are interested in obtaining the bootstrap estimate of the standard error of the Pearson correlation coefficient. The Bootstrap library contains a function, \verb+cor_df+, which calculates the Pearson correlation coefficient between the first and second columns of a matrix or dataframe.
 <<chunkname, fig.width=6, fig.height=3>>=
 law_school <- data.frame(
   LSAT=c(576,635,558,578,666,580,555,
@@ -58,8 +57,10 @@ bootstrap_law <- bootstrap(law_school, cor_df, B=1000)
 bootstrap_law$se
 
 library(ggplot2)
-bootstrap_law_df <- data.frame(T_boot = bootstrap_law$T_boot - cor_df(law_school))
-qplot(T_boot, data=bootstrap_law_df, geom="histogram", binwidth=0.02)
+bootstrap_law_df <- data.frame(
+  T_boot = bootstrap_law$T_boot - cor_df(law_school))
+qplot(T_boot, data=bootstrap_law_df, geom="histogram",
+      binwidth=0.02)
 @
 
 \section{Bayesian Bootstrap}

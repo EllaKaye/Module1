@@ -87,7 +87,6 @@ and loaded.
 \end{knitrout}
 
 
-
 \section{The Bootstrap}
 The bootstrap \parencite{Efron1979}, is a statistical tool which gives measures of accuracy of estimators, and can therefore be used draw inference about the parameters of the sampling distribution. It is a powerful and widely applicable tool.
 
@@ -102,7 +101,7 @@ dataset, giving bootstrap replications (resamples) $(x_1^{*(i)},\ldots,x_n^{*(i)
 
 The Bootstrap library contains a function, bootstrap, which automates the above procedure. It takes as inputs a data set (which can be a vector, matrix or dataframe), a function, FUN, which is used to obtain the statistic of interest, and the number, $B$, of bootstrap resamples required. Note that the data must be passed to FUN in one object.
 
-We now show how to use this function to replicate the example on page 37-38 of \textcite{Efron1983}, where we are interested in obtaining the bootstrap estimate of the standard error of the Pearson correlation coefficient. The Bootstrap library contains a function, , which calculates the Pearson correlation coefficient between the first and second columns of a matrix or dataframe.
+We now show how to use this function to replicate the example on page 37-38 of \textcite{Efron1983}, where we are interested in obtaining the bootstrap estimate of the standard error of the Pearson correlation coefficient. The Bootstrap library contains a function, \verb+cor_df+, which calculates the Pearson correlation coefficient between the first and second columns of a matrix or dataframe.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -121,8 +120,10 @@ We now show how to use this function to replicate the example on page 37-38 of \
 \end{verbatim}
 \begin{alltt}
 \hlkwd{library}\hlstd{(ggplot2)}
-\hlstd{bootstrap_law_df} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}\hlkwc{T_boot} \hlstd{= bootstrap_law}\hlopt{$}\hlstd{T_boot} \hlopt{-} \hlkwd{cor_df}\hlstd{(law_school))}
-\hlkwd{qplot}\hlstd{(T_boot,} \hlkwc{data}\hlstd{=bootstrap_law_df,} \hlkwc{geom}\hlstd{=}\hlstr{"histogram"}\hlstd{,} \hlkwc{binwidth}\hlstd{=}\hlnum{0.02}\hlstd{)}
+\hlstd{bootstrap_law_df} \hlkwb{<-} \hlkwd{data.frame}\hlstd{(}
+  \hlkwc{T_boot} \hlstd{= bootstrap_law}\hlopt{$}\hlstd{T_boot} \hlopt{-} \hlkwd{cor_df}\hlstd{(law_school))}
+\hlkwd{qplot}\hlstd{(T_boot,} \hlkwc{data}\hlstd{=bootstrap_law_df,} \hlkwc{geom}\hlstd{=}\hlstr{"histogram"}\hlstd{,}
+      \hlkwc{binwidth}\hlstd{=}\hlnum{0.02}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \includegraphics[width=\maxwidth]{figure/chunkname-1} 

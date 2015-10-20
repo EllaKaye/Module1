@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.10.30)  20 OCT 2015 18:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.10.30)  20 OCT 2015 18:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -467,39 +467,28 @@ Package color Info: Redefining color shadecolor on input line 82.
  [1
 
 {/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Package color Info: Redefining color shadecolor on input line 107.
-
-Overfull \hbox (85.49625pt too wide) in paragraph at lines 124--124
-[][]\OT1/cmtt/m/n/10 bootstrap_law_df[] []<-[] []data.frame[][]([][]T_boot[] []
-= bootstrap_law[][]$[][]T_boot[] []-[] []cor_df[][](law_school))[][] 
- []
-
-
-Overfull \hbox (17.24684pt too wide) in paragraph at lines 125--125
-[][]\OT1/cmtt/m/n/10 qplot[][](T_boot,[] []data[][]=bootstrap_law_df,[] []geom[
-][]=[][]"histogram"[][],[] []binwidth[][]=[][]0.02[][])[][] 
- []
+Package color Info: Redefining color shadecolor on input line 106.
 
 <figure/chunkname-1.pdf, id=18, 433.62pt x 216.81pt>
 File: figure/chunkname-1.pdf Graphic file (type pdf)
 
 <use figure/chunkname-1.pdf>
-Package pdftex.def Info: figure/chunkname-1.pdf used on input line 128.
+Package pdftex.def Info: figure/chunkname-1.pdf used on input line 129.
 (pdftex.def)             Requested size: 345.0pt x 172.50868pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 128--129
+Overfull \hbox (15.0pt too wide) in paragraph at lines 129--130
 [][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 133--134
+Underfull \hbox (badness 10000) in paragraph at lines 134--135
 
  []
 
 [2 <./figure/chunkname-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 141.
+Package color Info: Redefining color shadecolor on input line 142.
 
-Overfull \hbox (27.74675pt too wide) in paragraph at lines 151--151
+Overfull \hbox (27.74675pt too wide) in paragraph at lines 152--152
 [][]\OT1/cmtt/m/n/10 qplot[][](T_boot,[] []data[][]=BB_mean[][]$[][]replicates,
 [] []geom[][]=[][]"histogram"[][],[] []binwidth[][]=[][]0.05[][])[][] 
  []
@@ -508,29 +497,29 @@ Overfull \hbox (27.74675pt too wide) in paragraph at lines 151--151
 File: figure/unnamed-chunk-2-1.pdf Graphic file (type pdf)
 
 <use figure/unnamed-chunk-2-1.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-2-1.pdf used on input line 154.
+Package pdftex.def Info: figure/unnamed-chunk-2-1.pdf used on input line 155.
 (pdftex.def)             Requested size: 345.0pt x 172.50868pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 154--155
+Overfull \hbox (15.0pt too wide) in paragraph at lines 155--156
 [][] 
  []
 
-Package color Info: Redefining color shadecolor on input line 161.
+Package color Info: Redefining color shadecolor on input line 162.
 [3 <./figure/unnamed-chunk-2-1.pdf>]
-Overfull \hbox (34.73282pt too wide) in paragraph at lines 163--163
+Overfull \hbox (34.73282pt too wide) in paragraph at lines 164--164
 [][]\OT1/cmtt/m/it/10 # takes bivarate data and weights (g) and returns a weigh
 ted correlation[][] 
  []
 
-LaTeX Font Info:    Try loading font information for OMS+cmtt on input line 164
+LaTeX Font Info:    Try loading font information for OMS+cmtt on input line 165
 .
 (/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/omscmtt.fd
 File: omscmtt.fd 
 )
 LaTeX Font Info:    Font shape `OMS/cmtt/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 164.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 165.
 
-Overfull \hbox (22.4968pt too wide) in paragraph at lines 179--179
+Overfull \hbox (22.4968pt too wide) in paragraph at lines 180--180
 [][]\OT1/cmtt/m/n/10 qplot[][](T_boot,[] []data[][]=BB_law[][]$[][]replicates,[
 ] []geom[][]=[][]"histogram"[][],[] []binwidth[][]=[][]0.02[][])[][] 
  []
@@ -539,15 +528,15 @@ Overfull \hbox (22.4968pt too wide) in paragraph at lines 179--179
 File: figure/unnamed-chunk-3-1.pdf Graphic file (type pdf)
 
 <use figure/unnamed-chunk-3-1.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-3-1.pdf used on input line 182.
+Package pdftex.def Info: figure/unnamed-chunk-3-1.pdf used on input line 183.
 (pdftex.def)             Requested size: 345.0pt x 172.50868pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 182--183
+Overfull \hbox (15.0pt too wide) in paragraph at lines 183--184
 [][] 
  []
 
 [4 <./figure/unnamed-chunk-3-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 221.
+Package color Info: Redefining color shadecolor on input line 222.
  [5] (./Module1_report.aux)
 Package logreq Info: Writing requests to 'Module1_report.run.xml'.
 \openout1 = `Module1_report.run.xml'.
@@ -576,7 +565,7 @@ ve/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive
 /2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/
 2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2
 014/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Module1_report.pdf (5 pages, 184016 bytes).
+Output written on Module1_report.pdf (5 pages, 184043 bytes).
 PDF statistics:
  98 PDF objects out of 1000 (max. 8388607)
  69 compressed objects within 1 object stream
