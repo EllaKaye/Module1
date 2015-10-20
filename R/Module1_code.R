@@ -43,7 +43,7 @@ bootstrap <- function(data, FUN, ..., B=1000) {
 #' @examples
 #' A <- data.frame(x=rnorm(10), y=rnorm(10, mean=2))
 #' cor_df(A)
-cor.df <- function(bivar_data) {
+cor_df <- function(bivar_data) {
   cor(bivar_data[,1], bivar_data[,2])
 }
 
