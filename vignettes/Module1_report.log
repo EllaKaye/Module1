@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.10.30)  20 OCT 2015 16:07
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.10.30)  20 OCT 2015 18:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -237,11 +237,11 @@ File: biblatex.def
 \c@biburllcpenalty=\count200
 \c@smartand=\count201
 )
-Package biblatex Info: Trying to load bibliography style 'numeric'...
-Package biblatex Info: ... file 'numeric.bbx' found.
+Package biblatex Info: Trying to load bibliography style 'authoryear'...
+Package biblatex Info: ... file 'authoryear.bbx' found.
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/biblatex/bbx/numeric.bbx
-File: numeric.bbx 2013/11/25 v2.8a biblatex bibliography style (PK/JW/AB)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/biblatex/bbx/authoryear.bbx
+File: authoryear.bbx 2013/11/25 v2.8a biblatex bibliography style (PK/JW/AB)
 Package biblatex Info: Trying to load bibliography style 'standard'...
 Package biblatex Info: ... file 'standard.bbx' found.
 
@@ -250,22 +250,18 @@ File: standard.bbx 2013/11/25 v2.8a biblatex bibliography style (PK/JW/AB)
 \c@bbx:relatedcount=\count202
 \c@bbx:relatedtotal=\count203
 ))
-Package biblatex Info: Trying to load citation style 'numeric'...
-Package biblatex Info: ... file 'numeric.cbx' found.
+Package biblatex Info: Trying to load citation style 'authoryear'...
+Package biblatex Info: ... file 'authoryear.cbx' found.
 
-(/usr/local/texlive/2014/texmf-dist/tex/latex/biblatex/cbx/numeric.cbx
-File: numeric.cbx 2013/11/25 v2.8a biblatex citation style (PK/JW/AB)
+(/usr/local/texlive/2014/texmf-dist/tex/latex/biblatex/cbx/authoryear.cbx
+File: authoryear.cbx 2013/11/25 v2.8a biblatex citation style (PK/JW/AB)
 Package biblatex Info: Redefining '\cite'.
 Package biblatex Info: Redefining '\parencite'.
 Package biblatex Info: Redefining '\footcite'.
 Package biblatex Info: Redefining '\footcitetext'.
 Package biblatex Info: Redefining '\smartcite'.
-Package biblatex Info: Redefining '\supercite'.
 Package biblatex Info: Redefining '\textcite'.
 Package biblatex Info: Redefining '\textcites'.
-Package biblatex Info: Redefining '\cites'.
-Package biblatex Info: Redefining '\parencites'.
-Package biblatex Info: Redefining '\smartcites'.
 )
 Package biblatex Info: Trying to load configuration file...
 Package biblatex Info: ... file 'biblatex.cfg' found.
@@ -464,107 +460,107 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 63.
 (/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Package color Info: Redefining color shadecolor on input line 86.
+Package color Info: Redefining color shadecolor on input line 74.
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 88.
-LaTeX Font Info:    Try loading font information for OMS+cmtt on input line 95.
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 76.
+Package color Info: Redefining color shadecolor on input line 82.
+ [1
 
+{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+Package color Info: Redefining color shadecolor on input line 107.
 
-(/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/omscmtt.fd
-File: omscmtt.fd 
-)
-LaTeX Font Info:    Font shape `OMS/cmtt/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 95.
-
-Overfull \hbox (85.49625pt too wide) in paragraph at lines 108--108
+Overfull \hbox (85.49625pt too wide) in paragraph at lines 124--124
 [][]\OT1/cmtt/m/n/10 bootstrap_law_df[] []<-[] []data.frame[][]([][]T_boot[] []
 = bootstrap_law[][]$[][]T_boot[] []-[] []cor_df[][](law_school))[][] 
  []
 
 
-Overfull \hbox (17.24684pt too wide) in paragraph at lines 109--109
+Overfull \hbox (17.24684pt too wide) in paragraph at lines 125--125
 [][]\OT1/cmtt/m/n/10 qplot[][](T_boot,[] []data[][]=bootstrap_law_df,[] []geom[
 ][]=[][]"histogram"[][],[] []binwidth[][]=[][]0.02[][])[][] 
  []
 
-[1
-
-{/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 <figure/chunkname-1.pdf, id=18, 433.62pt x 216.81pt>
 File: figure/chunkname-1.pdf Graphic file (type pdf)
 
 <use figure/chunkname-1.pdf>
-Package pdftex.def Info: figure/chunkname-1.pdf used on input line 112.
+Package pdftex.def Info: figure/chunkname-1.pdf used on input line 128.
 (pdftex.def)             Requested size: 345.0pt x 172.50868pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 112--113
+Overfull \hbox (15.0pt too wide) in paragraph at lines 128--129
 [][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 117--118
+Underfull \hbox (badness 10000) in paragraph at lines 133--134
 
  []
 
 [2 <./figure/chunkname-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 125.
+Package color Info: Redefining color shadecolor on input line 141.
 
-Overfull \hbox (27.74675pt too wide) in paragraph at lines 135--135
+Overfull \hbox (27.74675pt too wide) in paragraph at lines 151--151
 [][]\OT1/cmtt/m/n/10 qplot[][](T_boot,[] []data[][]=BB_mean[][]$[][]replicates,
 [] []geom[][]=[][]"histogram"[][],[] []binwidth[][]=[][]0.05[][])[][] 
  []
 
-<figure/unnamed-chunk-1-1.pdf, id=28, 433.62pt x 216.81pt>
-File: figure/unnamed-chunk-1-1.pdf Graphic file (type pdf)
+<figure/unnamed-chunk-2-1.pdf, id=27, 433.62pt x 216.81pt>
+File: figure/unnamed-chunk-2-1.pdf Graphic file (type pdf)
 
-<use figure/unnamed-chunk-1-1.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-1-1.pdf used on input line 138.
+<use figure/unnamed-chunk-2-1.pdf>
+Package pdftex.def Info: figure/unnamed-chunk-2-1.pdf used on input line 154.
 (pdftex.def)             Requested size: 345.0pt x 172.50868pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 138--139
+Overfull \hbox (15.0pt too wide) in paragraph at lines 154--155
 [][] 
  []
 
-Package color Info: Redefining color shadecolor on input line 145.
-
-Overfull \hbox (34.73282pt too wide) in paragraph at lines 147--147
+Package color Info: Redefining color shadecolor on input line 161.
+[3 <./figure/unnamed-chunk-2-1.pdf>]
+Overfull \hbox (34.73282pt too wide) in paragraph at lines 163--163
 [][]\OT1/cmtt/m/it/10 # takes bivarate data and weights (g) and returns a weigh
 ted correlation[][] 
  []
 
+LaTeX Font Info:    Try loading font information for OMS+cmtt on input line 164
+.
+(/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/omscmtt.fd
+File: omscmtt.fd 
+)
+LaTeX Font Info:    Font shape `OMS/cmtt/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 164.
 
-Overfull \hbox (22.4968pt too wide) in paragraph at lines 163--163
+Overfull \hbox (22.4968pt too wide) in paragraph at lines 179--179
 [][]\OT1/cmtt/m/n/10 qplot[][](T_boot,[] []data[][]=BB_law[][]$[][]replicates,[
 ] []geom[][]=[][]"histogram"[][],[] []binwidth[][]=[][]0.02[][])[][] 
  []
 
-<figure/unnamed-chunk-2-1.pdf, id=29, 433.62pt x 216.81pt>
-File: figure/unnamed-chunk-2-1.pdf Graphic file (type pdf)
+<figure/unnamed-chunk-3-1.pdf, id=36, 433.62pt x 216.81pt>
+File: figure/unnamed-chunk-3-1.pdf Graphic file (type pdf)
 
-<use figure/unnamed-chunk-2-1.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-2-1.pdf used on input line 166.
+<use figure/unnamed-chunk-3-1.pdf>
+Package pdftex.def Info: figure/unnamed-chunk-3-1.pdf used on input line 182.
 (pdftex.def)             Requested size: 345.0pt x 172.50868pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 166--167
+Overfull \hbox (15.0pt too wide) in paragraph at lines 182--183
 [][] 
  []
 
-[3 <./figure/unnamed-chunk-1-1.pdf>] [4 <./figure/unnamed-chunk-2-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 205.
-
-[5] (./Module1_report.aux)
+[4 <./figure/unnamed-chunk-3-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 221.
+ [5] (./Module1_report.aux)
 Package logreq Info: Writing requests to 'Module1_report.run.xml'.
 \openout1 = `Module1_report.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 7534 strings out of 493117
- 119636 string characters out of 6135432
- 282170 words of memory out of 5000000
- 10873 multiletter control sequences out of 15000+600000
+ 7541 strings out of 493117
+ 119815 string characters out of 6135432
+ 282595 words of memory out of 5000000
+ 10880 multiletter control sequences out of 15000+600000
  12813 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,6n,48p,832b,902s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,6n,52p,832b,891s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb><
 /usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmitt10.pfb><
@@ -580,7 +576,7 @@ ve/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive
 /2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/
 2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/2
 014/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Module1_report.pdf (5 pages, 181532 bytes).
+Output written on Module1_report.pdf (5 pages, 184003 bytes).
 PDF statistics:
  98 PDF objects out of 1000 (max. 8388607)
  69 compressed objects within 1 object stream

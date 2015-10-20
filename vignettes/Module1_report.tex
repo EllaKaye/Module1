@@ -49,7 +49,7 @@
 
 \usepackage{alltt}
 
-\usepackage[backend=bibtex]{biblatex}
+\usepackage[style=authoryear, backend=bibtex]{biblatex}
 \bibliography{bootstrap.bib}
 
 \usepackage{latexsym,amsmath,amssymb}
@@ -66,22 +66,43 @@
 We present a variety of bootstrap methods in R.
 \end{abstract}
 
+\section{Introduction}
+Short intro to all three bootstraps.
+
+We have developed a package, Bootstrap, with functions to implement the bootstrap, Bayesian bootstrap and bag of little bootstraps. The package can be obtained from GitHub,
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{devtools}\hlopt{::}\hlkwd{install_github}\hlstd{(}\hlstr{"EllaKaye/Module1"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+and loaded.
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(Bootstrap)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+
 \section{The Bootstrap}
 The bootstrap \parencite{Efron1979}, is a statistical tool which gives measures of accuracy of estimators, and can therefore be used draw inference about the parameters of the sampling distribution. It is a powerful and widely applicable tool.
 
-Suppose we observe a sample of $n$ iid realisations  $x_1,\ldots, x_n \sim P$, for some probability measure $P$. The goal is to obtain an estimate $\theta_n$ = $\theta_n(x_1, . . . , x_n)$ and compute an assessment $\xi$ of the quality of $\theta_n$ (for example, $\theta_n$ could be the median, and $\xi$ the standard error). To obtain a bootstrap estimate, we procede as follows:
+Suppose we observe a sample of $n$ iid realisations  $x_1,\ldots, x_n \sim P$, for some probability measure $P$. Let $\theta$ be a parameter of the distribution, and $\hat\theta_n$ be an estimator of $\theta$. The goal of the bootstrap is to obtain an assessment, $\xi$, of the quality of the estimator. For example, $\theta_n$ could be the median, and $\xi$ the standard error. To obtain a bootstrap estimate, we procede as follows:
 
 \begin{enumerate}
 \item Repeatedly ($B$ times) sample $n$ points with replacement from the original
-dataset.
-\item Compute $\theta_n^*$ on each of the $B$ resamples.
-\item Compute $\xi^*$ based on these $B$ realizations of $\theta_n^*$ as our estimate of $\xi$ of $\theta_n$
+dataset, giving bootstrap replications (resamples) $(x_1^{*(i)},\ldots,x_n^{*(i)}), i=1,\ldots,B$
+\item Compute $\hat\theta_n^{*(i)}$ on each of the $B$ resamples.
+\item Compute $\xi^*=\xi(\hat\theta_n^{*(1)},\ldots,\hat\theta_n^{*(B)})$ as our estimate of $\xi$.
 \end{enumerate}
 
-We have developed a function, bootstrap, which automates the above procedure. It takes as inputs a data set (which can be a vector, matrix or dataframe), a function, FUN, which is used to obtain the statistic of interest, and the number, $B$, of bootstrap resamples required. We now show how to use this function to replicate the example on page 37-38 of CITE EFRON AND GONG 1983, where we are interested in obtaining the bootstrap estimate of the standard error of the Pearson correlation coefficient:
+The Bootstrap library contains a function, bootstrap, which automates the above procedure. It takes as inputs a data set (which can be a vector, matrix or dataframe), a function, FUN, which is used to obtain the statistic of interest, and the number, $B$, of bootstrap resamples required. Note that the data must be passed to FUN in one object.
 
-
-
+We now show how to use this function to replicate the example on page 37-38 of \textcite{Efron1983}, where we are interested in obtaining the bootstrap estimate of the standard error of the Pearson correlation coefficient. The Bootstrap library contains a function, which calculates the Pearson correlation coefficient between the first and second columns of a matrix or dataframe.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
@@ -90,11 +111,6 @@ We have developed a function, bootstrap, which automates the above procedure. It
          \hlnum{661}\hlstd{,}\hlnum{651}\hlstd{,}\hlnum{605}\hlstd{,}\hlnum{653}\hlstd{,}\hlnum{575}\hlstd{,}\hlnum{545}\hlstd{,}\hlnum{572}\hlstd{,}\hlnum{594}\hlstd{),}
   \hlkwc{GPA}\hlstd{=}\hlkwd{c}\hlstd{(}\hlnum{3.39}\hlstd{,}\hlnum{3.30}\hlstd{,}\hlnum{2.81}\hlstd{,}\hlnum{3.03}\hlstd{,}\hlnum{3.44}\hlstd{,}\hlnum{3.07}\hlstd{,}\hlnum{3.00}\hlstd{,}
         \hlnum{3.43}\hlstd{,}\hlnum{3.36}\hlstd{,}\hlnum{3.13}\hlstd{,}\hlnum{3.12}\hlstd{,}\hlnum{2.74}\hlstd{,}\hlnum{2.76}\hlstd{,}\hlnum{2.88}\hlstd{,}\hlnum{2.96}\hlstd{))}
-
-\hlcom{# computes correlation coefficient of data stored in a data frame}
-\hlstd{cor_df} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{bivar_data}\hlstd{) \{}
-  \hlkwd{cor}\hlstd{(bivar_data[,}\hlnum{1}\hlstd{], bivar_data[,}\hlnum{2}\hlstd{])}
-\hlstd{\}}
 
 \hlkwd{set.seed}\hlstd{(}\hlnum{1}\hlstd{)}
 \hlstd{bootstrap_law} \hlkwb{<-} \hlkwd{bootstrap}\hlstd{(law_school, cor_df,} \hlkwc{B}\hlstd{=}\hlnum{1000}\hlstd{)}
@@ -135,7 +151,7 @@ The following code gives the BB distribution when the parameter of interest is t
 \hlkwd{qplot}\hlstd{(T_boot,} \hlkwc{data}\hlstd{=BB_mean}\hlopt{$}\hlstd{replicates,} \hlkwc{geom}\hlstd{=}\hlstr{"histogram"}\hlstd{,} \hlkwc{binwidth}\hlstd{=}\hlnum{0.05}\hlstd{)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=\maxwidth]{figure/unnamed-chunk-1-1} 
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-2-1} 
 
 \end{knitrout}
 
@@ -163,7 +179,7 @@ It may be necessary to define your own function for the statistic of interest th
 \hlkwd{qplot}\hlstd{(T_boot,} \hlkwc{data}\hlstd{=BB_law}\hlopt{$}\hlstd{replicates,} \hlkwc{geom}\hlstd{=}\hlstr{"histogram"}\hlstd{,} \hlkwc{binwidth}\hlstd{=}\hlnum{0.02}\hlstd{)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=\maxwidth]{figure/unnamed-chunk-2-1} 
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-3-1} 
 
 \end{knitrout}
 

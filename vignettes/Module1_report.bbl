@@ -26,12 +26,39 @@
   }
   \strng{namehash}{EB1}
   \strng{fullhash}{EB1}
+  \field{labelyear}{1979}
   \field{sortinit}{E}
   \field{pages}{1\bibrangedash 26}
   \field{title}{Bootstrap methods: another look at the jackknife}
   \field{volume}{7}
   \field{journaltitle}{Annals of Statistics}
   \field{year}{1979}
+\endentry
+
+\entry{Efron1983}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Efron}{E.}%
+     {Bradley}{B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gong}{G.}%
+     {Gail}{G.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{EBGG1}
+  \strng{fullhash}{EBGG1}
+  \field{labelyear}{1983}
+  \field{sortinit}{E}
+  \field{number}{1}
+  \field{pages}{36\bibrangedash 48}
+  \field{title}{A Leisurely Look at the Bootstrap, the Jackknife, and
+  Cross-Validation}
+  \field{volume}{37}
+  \field{journaltitle}{The American Statistician}
+  \field{year}{1983}
 \endentry
 
 \lossort

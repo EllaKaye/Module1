@@ -1,6 +1,6 @@
 \documentclass{article}
 
-\usepackage[backend=bibtex]{biblatex}
+\usepackage[style=authoryear, backend=bibtex]{biblatex}
 \bibliography{bootstrap.bib}
 
 \usepackage{latexsym,amsmath,amssymb}
@@ -17,61 +17,41 @@
 We present a variety of bootstrap methods in R.
 \end{abstract}
 
-\section{The Bootstrap}
-The bootstrap \parencite{Efron1979}, is a statistical tool which gives measures of accuracy of estimators, and can therefore be used draw inference about the parameters of the sampling distribution. It is a powerful and widely applicable tool.
+\section{Introduction}
+Short intro to all three bootstraps.
 
-Suppose we observe a sample of $n$ iid realisations  $x_1,\ldots, x_n \sim P$, for some probability measure $P$. The goal is to obtain an estimate $\theta_n$ = $\theta_n(x_1, . . . , x_n)$ and compute an assessment $\xi$ of the quality of $\theta_n$ (for example, $\theta_n$ could be the median, and $\xi$ the standard error). To obtain a bootstrap estimate, we procede as follows:
-
-\begin{enumerate}
-\item Repeatedly ($B$ times) sample $n$ points with replacement from the original
-dataset.
-\item Compute $\theta_n^*$ on each of the $B$ resamples.
-\item Compute $\xi^*$ based on these $B$ realizations of $\theta_n^*$ as our estimate of $\xi$ of $\theta_n$
-\end{enumerate}
-
-We have developed a function, bootstrap, which automates the above procedure. It takes as inputs a data set (which can be a vector, matrix or dataframe), a function, FUN, which is used to obtain the statistic of interest, and the number, $B$, of bootstrap resamples required. We now show how to use this function to replicate the example on page 37-38 of CITE EFRON AND GONG 1983, where we are interested in obtaining the bootstrap estimate of the standard error of the Pearson correlation coefficient:
-<<bootstrap, echo=FALSE>>=
-bootstrap <- function(data, FUN, ..., B=1000) {
-  T_boot <- numeric(B)
-
-  # when data is a vector
-  if (is.null(nrow(data))) {
-    n <- length(data)
-
-    for (b in 1:B) {
-      X_star <- sample(data, n, replace=TRUE)
-      T_boot[b] <- FUN(X_star, ...)
-    }
-  }
-
-  # when data is a matrix or dataframe.
-  else {
-    n <- nrow(data)
-
-    for (b in 1:B) {
-      index <- sample(1:n, n, replace=TRUE)
-      X_star <- data[index,]
-      T_boot[b] <- FUN(X_star, ...)
-    }
-  }
-
-  se <- sd(T_boot)
-  return(list(se=se, T_boot=T_boot))
-}
+We have developed a package, Bootstrap, with functions to implement the bootstrap, Bayesian bootstrap and bag of little bootstraps. The package can be obtained from GitHub,
+<<library, eval=FALSE>>=
+devtools::install_github("EllaKaye/Module1")
+@
+and loaded.
+<<>>=
+library(Bootstrap)
 @
 
 
+
+\section{The Bootstrap}
+The bootstrap \parencite{Efron1979}, is a statistical tool which gives measures of accuracy of estimators, and can therefore be used draw inference about the parameters of the sampling distribution. It is a powerful and widely applicable tool.
+
+Suppose we observe a sample of $n$ iid realisations  $x_1,\ldots, x_n \sim P$, for some probability measure $P$. Let $\theta$ be a parameter of the distribution, and $\hat\theta_n$ be an estimator of $\theta$. The goal of the bootstrap is to obtain an assessment, $\xi$, of the quality of the estimator. For example, $\theta_n$ could be the median, and $\xi$ the standard error. To obtain a bootstrap estimate, we procede as follows:
+
+\begin{enumerate}
+\item Repeatedly ($B$ times) sample $n$ points with replacement from the original
+dataset, giving bootstrap replications (resamples) $(x_1^{*(i)},\ldots,x_n^{*(i)}), i=1,\ldots,B$
+\item Compute $\hat\theta_n^{*(i)}$ on each of the $B$ resamples.
+\item Compute $\xi^*=\xi(\hat\theta_n^{*(1)},\ldots,\hat\theta_n^{*(B)})$ as our estimate of $\xi$.
+\end{enumerate}
+
+The Bootstrap library contains a function, bootstrap, which automates the above procedure. It takes as inputs a data set (which can be a vector, matrix or dataframe), a function, FUN, which is used to obtain the statistic of interest, and the number, $B$, of bootstrap resamples required. Note that the data must be passed to FUN in one object.
+
+We now show how to use this function to replicate the example on page 37-38 of \textcite{Efron1983}, where we are interested in obtaining the bootstrap estimate of the standard error of the Pearson correlation coefficient. The Bootstrap library contains a function, , which calculates the Pearson correlation coefficient between the first and second columns of a matrix or dataframe.
 <<chunkname, fig.width=6, fig.height=3>>=
 law_school <- data.frame(
   LSAT=c(576,635,558,578,666,580,555,
          661,651,605,653,575,545,572,594),
   GPA=c(3.39,3.30,2.81,3.03,3.44,3.07,3.00,
         3.43,3.36,3.13,3.12,2.74,2.76,2.88,2.96))
-
-# computes correlation coefficient of data stored in a data frame
-cor_df <- function(bivar_data) {
-  cor(bivar_data[,1], bivar_data[,2])
-}
 
 set.seed(1)
 bootstrap_law <- bootstrap(law_school, cor_df, B=1000)
