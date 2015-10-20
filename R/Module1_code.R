@@ -35,6 +35,14 @@ bootstrap <- function(data, FUN, ..., B=1000) {
 }
 
 # correlation function on a data-frame or matrix
+
+#' Pearson's correlation coefficient of bivariate data
+#'
+#' @param bivar_data A data-frame or matrix, the first two columns of which contain the two vectors for which the correlation coefficient is required
+#' @return the Pearson correlation coefficient of bivar_data[,1] and bivar_data[,2]
+#' @examples
+#' A <- data.frame(x=rnorm(10), y=rnorm(10, mean=2))
+#' cor_df(A)
 cor_df <- function(bivar_data) {
   cor(bivar_data[,1], bivar_data[,2])
 }
