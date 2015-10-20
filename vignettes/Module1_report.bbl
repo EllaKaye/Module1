@@ -1,0 +1,40 @@
+% $ biblatex auxiliary file $
+% $ biblatex version 2.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\entry{Efron1979}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Efron}{E.}%
+     {Bradley}{B.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{EB1}
+  \strng{fullhash}{EB1}
+  \field{sortinit}{E}
+  \field{pages}{1\bibrangedash 26}
+  \field{title}{Bootstrap methods: another look at the jackknife}
+  \field{volume}{7}
+  \field{journaltitle}{Annals of Statistics}
+  \field{year}{1979}
+\endentry
+
+\lossort
+\endlossort
+
+\endinput
