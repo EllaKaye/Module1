@@ -8,30 +8,35 @@ library(boot)
 # FUN must act on a vector in 1-dim case, or a matrix or data-frame in N-dim case
 bootstrap <- function(data, FUN, ..., B=1000) {
   T_boot <- numeric(B)
-  
+
   # when data is a vector
   if (is.null(nrow(data))) {
     n <- length(data)
-    
+
     for (b in 1:B) {
       X_star <- sample(data, n, replace=TRUE)
       T_boot[b] <- FUN(X_star, ...)
     }
   }
-  
+
   # when data is a matrix or dataframe.
   else {
     n <- nrow(data)
-    
+
     for (b in 1:B) {
       index <- sample(1:n, n, replace=TRUE)
       X_star <- data[index,]
       T_boot[b] <- FUN(X_star, ...)
     }
   }
-  
+
   se <- sd(T_boot)
   return(list(se=se, T_boot=T_boot))
+}
+
+# correlation function on a data-frame or matrix
+cor_df <- function(bivar_data) {
+  cor(bivar_data[,1], bivar_data[,2])
 }
 
 # test function on law school data
@@ -50,35 +55,35 @@ cb
 
 ### Bayesian Bootstrap
 
-# takes a dataset (either vector, matrix or dataframe), 
-# a function which takes data and weights and returns the statistic of interest, 
+# takes a dataset (either vector, matrix or dataframe),
+# a function which takes data and weights and returns the statistic of interest,
 # and the number of bootstrap samples.
 # returns a dataframe with the statistic of interest for each bootstrap sample
 # and the standard errors of those statistics
 BB <- function(data, FUN, ..., B=1000) {
-  
-  # find number of original samples  
+
+  # find number of original samples
   # if data is a vector
   if (is.null(nrow(data))) n <- length(data)
-  
+
   # if data is a matrix or dataframe
-  else n <- nrow(data)   
-  
+  else n <- nrow(data)
+
   # find dim of FUN output and set up storage space (which will allow plotting)
   init_weights <- rep(1/n, n)
   dims <- dim(FUN(data, init_weights, ...))
   T_boot <- matrix(0, B, prod(dims))
-  
+
   # generate bootstrap replicates
   for (b in 1:B) {
     # generate weights from uniform Dirichlet
     u <- runif(n-1)
     g <- diff(c(0, sort(u), 1))
-    
+
     # calculate the statistic, using above weights
     T_boot[b,] <- FUN(data, g, ...)
-  }  
-  
+  }
+
   # T_boot_df allows for plotting of the bootstrap replicates using ggplot2
   T_boot_df <- data.frame(T_boot=T_boot)
   return(list(se=sd(T_boot), replicates=T_boot_df))
@@ -116,18 +121,18 @@ BLB.1d <- function(data, FUN, ..., gamma, s=20, r=100) {
   n <- length(data)
   b <- round(n^gamma)
   xis <- numeric(s)
-  
+
   subsamp_mat <- matrix(0, s, b)
   subsamp <- numeric(b)
   resample_mat <- matrix(0, r, n)
-  
+
   for (i in 1:s) {
     subsamp <- sample(data, b)
     resample_mat <- matrix(sample(subsamp, r*n, replace = TRUE), r, n)
     theta <- apply(resample_mat, 1, FUN, ...)
     xis[i] <- sd(theta)
   }
-  
+
   return(mean(xis))
 }
 
