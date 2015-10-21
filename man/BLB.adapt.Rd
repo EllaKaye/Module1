@@ -4,7 +4,8 @@
 \alias{BLB.adapt}
 \title{BLB with adaptive selection on r and s}
 \usage{
-BLB.adapt(data, gamma, w_s, w_r, lambda, err, alpha)
+BLB.adapt(data, gamma = 0.7, w_s = 3, w_r = 20, lambda = 10^(-5),
+  epsilon = 0.05, alpha = 0.05)
 }
 \arguments{
 \item{data}{a matrix or dataframe}
@@ -17,9 +18,9 @@ BLB.adapt(data, gamma, w_s, w_r, lambda, err, alpha)
 
 \item{lambda}{specifies the L2 penalty in Ridge regression}
 
-\item{err}{relative error for the convergence criterion in adaptive selection}
-
 \item{alpha}{the level of the confidence which is set to 0.05}
+
+\item{err}{relative error for the convergence criterion in adaptive selection}
 }
 \value{
 a list consisting of
@@ -33,11 +34,11 @@ BLB function which returns the average (across dimensions) confidence interal wi
 r and s which were chosen adaptively within the function
 }
 \examples{
-X <- mvrnorm(100 ,mu = rep(0,2) ,Sigma <- diag(2) )
-epsilon <- rnorm(100,mean=0,sd=sqrt(10))
-t_theta <- as.matrix( rep(1 ,2 ) )
-Y <- X\%*\%t_theta + epsilon
-my_data <- cbind(X ,Y )
-my_result <- BLB_adapt(my_data ,0.7 ,3 ,20 ,10^(-5) ,0.05 ,alpha=0.05 )
+X <- mvrnorm(100, mu = rep(0,2), Sigma <- diag(2))
+epsilon <- rnorm(100, mean=0, sd=sqrt(10))
+t_theta <- as.matrix(rep(1, 2))
+Y <- X \%*\% t_theta + epsilon
+my_data <- cbind(X, Y)
+my_result <- BLB.adapt(my_data, gamma=0.7, w_s=3, w_r=20, lambda=10^(-5), epsilon=0.05, alpha=0.05)
 }
 

@@ -3,9 +3,14 @@ library(ggplot2)
 library(boot)
 
 ### Bootstrap
-# returns bootstrap replicates and their standard error
-# data is a vector, matrix or data-frame
-# FUN must act on a vector in 1-dim case, or a matrix or data-frame in N-dim case
+#' Bootstrap
+#' @param data the original sample, as a vector, matrix or dataframe
+#' @param  data is a vector, matrix or data-frame
+#' @param FUN a function to calculate an estimate of the parameter of interest. FUN must act on a vector in 1-dim case, or a matrix or data-frame in N-dim case. It must also return a single number.
+#' @param B the number of bootstrap replications
+#' @return a list consisting of
+#' \item{replicates}{a matrix containing an estimate for the parameter of interest of each bootstrap replicate}
+#' \item{se}{the standard error of the parameter estimates}
 bootstrap <- function(data, FUN, ..., B=1000) {
   T_boot <- numeric(B)
 
@@ -31,7 +36,7 @@ bootstrap <- function(data, FUN, ..., B=1000) {
   }
 
   se <- sd(T_boot)
-  return(list(se=se, T_boot=T_boot))
+  return(list(se=se, replicates=T_boot))
 }
 
 # correlation function on a data-frame or matrix
@@ -54,6 +59,13 @@ cor_df <- function(bivar_data) {
 # and the number of bootstrap samples.
 # returns a dataframe with the statistic of interest for each bootstrap sample
 # and the standard errors of those statistics
+#' Bayesian bootstrap
+#' @param data the original sample, as a vector, matrix or dataframe
+#' @param FUN a function to calculate an estimate of the parameter of interest
+#' @param B the number of bootstrap replications
+#' @return a list consisting of
+#' \item{replicates}{a matrix containing an estimate for the parameter of interest of each bootstrap replicate}
+#' \item{se}{the standard error of the parameter estimates}
 BB <- function(data, FUN, ..., B=1000) {
 
   # find number of original samples
@@ -83,8 +95,19 @@ BB <- function(data, FUN, ..., B=1000) {
   return(list(se=sd(T_boot), replicates=T_boot_df))
 }
 
-# takes bivarate data and weights (g) and returns a weighted correlation
+#' takes bivarate data and weights (g) and returns a weighted correlation
+#' @title Weighted correlation
+#' @param data a matrix or dataframe in which the first two columns contain the two vectors for which the weighted correlation is sought
+#' @param g a vector of weights
+#' @return the weighted correlation
+#' @examples
+#' df <- data.frame(norm = rnorm(10), unif = runif(10))
+#' weights <- rep(1/10, 10)
+#' weighted.cor(df, weights)
 weighted.cor <- function(data, g) {
+  # check dimensions
+  if (length(g) != nrow(data)) stop("length(g) must equal nrow(data)")
+
   y <- data[,1]
   z <- data[,2]
   wc_num <- sum(g*y*z)-(sum(g*y))*(sum(g*z))
@@ -92,12 +115,17 @@ weighted.cor <- function(data, g) {
   wc_num/sqrt(wc_den)
 }
 
-### Bag of Little Bootstraps
-# data is a vector
-# gamma is a number ideally between [0.5, 1] which controls size of subsample
-# s is number of nodes
-# r is number of replicates per node
-# returns the mean of the standard errors of the bootstrap replicates.
+#' Implements Bag of Little Bootstraps on a 1-d data vector, with a generic function for the estimator
+#' @title Bag of Little Bootstraps in 1d
+#' @param data a vector of the original sample
+#' @param gamma controls the size of the subsamples - ideally in [0.5, 1]
+#' @param FUN a function to calculate the estimator of the parameter of interest
+#' @param s the number of subsamples
+#' @param r the number of bootstrap replications (resamples) per subsample
+#' @return the mean across the s subsamples of the standard errors of the parameter estimates
+#' @examples
+#' X <- rnorm(5000)
+#' BLB.1d(X, mean, gamma=0.5)
 BLB.1d <- function(data, gamma, FUN, ..., s=20, r=100) {
   n <- length(data)
   b <- round(n^gamma)

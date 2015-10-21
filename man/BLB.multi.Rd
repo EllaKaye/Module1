@@ -4,7 +4,7 @@
 \alias{BLB.multi}
 \title{BLB for multivariate data}
 \usage{
-BLB.multi(data, gamma = 0.7, s = 20, r = 100, lambda = 10^-5,
+BLB.multi(data, gamma = 0.7, s = 20, r = 100, lambda = 10^(-5),
   alpha = 0.05)
 }
 \arguments{
@@ -31,11 +31,11 @@ BLB function that computes the (1-alpha)\% CI and the standard errors of the par
 \examples{
 n <- 100
 d <- 5
-X <- mvrnorm(n ,mu = rep(0 ,d ) ,Sigma <- diag( d ) )
-epsilon <- rnorm(n ,mean = 0 ,sd = sqrt(10 ) )
-t_theta <- as.matrix( rep(1 ,d ) )
-Y <- X\%*\%t_theta + epsilon
-data <- cbind(X ,Y )
-my_result <- BLB.multi(data, 0,7, 15 ,100 ,10^(-5) )
+X <- mvrnorm(n, mu = rep(0, d) ,Sigma <- diag(d))
+epsilon <- rnorm(n, mean = 0, sd = sqrt(10))
+t_theta <- as.matrix(rep(1, d))
+Y <- X \%*\% t_theta + epsilon
+data <- cbind(X, Y)
+my_result <- BLB.multi(data, 0.7, 15, 100, 10^(-5))
 }
 
