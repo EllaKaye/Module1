@@ -25,7 +25,7 @@ Short intro to all three bootstraps. SAY MORE.
 
 
 We have developed a package, Bootstrap, with functions to implement the bootstrap, Bayesian bootstrap and bag of little bootstraps. The package can be obtained from GitHub,
-<<library, eval=FALSE>>=
+<<library>>=
 devtools::install_github("EllaKaye/Module1")
 @
 and loaded.
