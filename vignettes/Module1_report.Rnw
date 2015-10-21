@@ -25,7 +25,7 @@ Short intro to all three bootstraps. SAY MORE.
 
 
 We have developed a package, Bootstrap, with functions to implement the bootstrap, Bayesian bootstrap and bag of little bootstraps. The package can be obtained from GitHub,
-<<library>>=
+<<library, eval=FALSE, message=FALSE, warning=FALSE>>=
 devtools::install_github("EllaKaye/Module1")
 @
 and loaded.
@@ -71,38 +71,6 @@ qplot(T_boot, data=bootstrap_law_df, geom="histogram",
 Rubin introduced the Bayesian bootstrap (BB) as the natural Bayesian analogue of the bootstrap. Each BB replication generates a posterior probability for each $x_i$, which is centered at $1/n$, but has variability. To obtain a BB replication, first generate a set of weights by drawing $(n-1)$ uniform(0,1) random variates, $u_1, \ldots, u_(n-1)$, ordering them and calculating the gaps $g_t = u_{(t)} - u_{(t-1)}, t=1,\ldots,n$, where $u_{(0)}=0$ and $u_{(n)}=1$. These gaps, $g = (g_1,\ldots,g_n)$ form the weights to attach to the data values in that replication. Considering all the BB replications gives the BB distribution of $X$, and thus of any parameter of this distibution.\\
 
 Our function BB gives a BB distribution. It takes as its inputs a dataset (as a vector, matrix or dataframe), a function for calculating the statistic $\hat{\theta}$ (this function must take two arguments - one for data and one for weights), and $B$, the number of replications required. It returns a list, the first item of which is the standard error of the replicates. The second item is a dataframe with $\theta_1^*,\ldots,\theta_B^*$.
-
-<<BB, echo=FALSE>>=
-BB <- function(data, FUN, ..., B=1000) {
-
-  # find number of original samples
-  # if data is a vector
-  if (is.null(nrow(data))) n <- length(data)
-
-  # if data is a matrix or dataframe
-  else n <- nrow(data)
-
-  # find dim of FUN output and set up storage space (which will allow plotting)
-  init_weights <- rep(1/n, n)
-  dims <- dim(FUN(data, init_weights, ...))
-  T_boot <- matrix(0, B, prod(dims))
-
-  # generate bootstrap replicates
-  for (b in 1:B) {
-    # generate weights from uniform Dirichlet
-    u <- runif(n-1)
-    g <- diff(c(0, sort(u), 1))
-
-    # calculate the statistic, using above weights
-    T_boot[b,] <- FUN(data, g, ...)
-  }
-
-  # T_boot_df allows for plotting of the bootstrap replicates using ggplot2
-  T_boot_df <- data.frame(T_boot=T_boot)
-  return(list(se=sd(T_boot), replicates=T_boot_df))
-}
-
-@
 
 The following code gives the BB distribution when the parameter of interest is the mean. Here the function weighted.mean is in the R base package.
 <<fig.width=6, fig.height=3>>=
@@ -151,7 +119,7 @@ The Bootstrap package contains three functions which implement BLB in different 
 X <- rnorm(5000)
 BLB.1d(X, mean, gamma=0.5)
 @
-SAY SOMETHING ABOUT TIME.
+INCREASE DIM AND SAY SOMETHING ABOUT TIME.
 
 In their paper, \textcite{Kleiner2014} conduct a simulation study. They generate data from the true underlying distribution, a linear model $Y_i = \tilde X_i^{\top}\textbf{1}_d + \epsilon_i$, with iid $\tilde X_i \sim MVN(0,\mathbb{I}_d)$ and $\epsilon_i \sim N(0,10)$. The estimator $\hat\theta_n$ consists of a linear least squares regression coefficients, with a small $L_2$ penalty of $\lambda=10^{-5}$. To replicate their results, we created the function \texttt{BLB.multi}, which accepts as input an $n \times (d+1)$ dataframe or matrix, where each row is an observation, combining the $d$-dimensional $x$ observation and, in the right-most column, the response, $y$. The tuning parameters for BLB $\gamma, r$ and $s$ can all be set, as can the tuning parameter $\lambda$ for the penalised regression, and $\alpha$, which controls the width of the confidence intervals. The function returns a list containing the BLB estimate of three quality measures, $\xi^*$: the confidence intervals for each dimension of the estimator, a vector with the width of those intervals, and the standard error of the estimator. As in the paper, we tested the function with $n=20,000$, though we reduced the dimension $d$ from 100 to 10. We chose $\gamma=0.7$, kept $r=100$, and set $s=15$ (which is ample for convergence). This took under under 90 seconds to evaluate.
 

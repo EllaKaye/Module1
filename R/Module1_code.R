@@ -47,20 +47,6 @@ cor_df <- function(bivar_data) {
   cor(bivar_data[,1], bivar_data[,2])
 }
 
-# test function on law school data
-law_school <- data.frame(LSAT=c(576,635,558,578,666,580,555,661,651,605,653,575,545,572,594), GPA=c(3.39,3.30,2.81,3.03,3.44,3.07,3.00,3.43,3.36,3.13,3.12,2.74,2.76,2.88,2.96))
-cor(law_school$LSAT, law_school$GPA)
-bootstrap_law <- bootstrap(law_school, cor_df, B=1000)
-bootstrap_law$se
-bootstrap_law_df <- data.frame(T_boot = bootstrap_law$T_boot - cor_df(law_school))
-qplot(T_boot, data=bootstrap_law_df, geom="histogram", binwidth=0.02)
-
-# compare our function with boot
-set.seed(1)
-cor_boot <- function(data, i) cor(data[i,1], data[i,2])
-cb <- boot(law_school, cor_boot, 1000)
-cb
-
 ### Bayesian Bootstrap
 
 # takes a dataset (either vector, matrix or dataframe),
@@ -97,13 +83,6 @@ BB <- function(data, FUN, ..., B=1000) {
   return(list(se=sd(T_boot), replicates=T_boot_df))
 }
 
-# test the BB function with mean
-X <- rnorm(100, 4, 2)
-BB_mean <- BB(X, weighted.mean, B=10000)
-BB_mean$se
-qplot(T_boot, data=BB_mean$replicates, geom="histogram", binwidth=0.05)
-
-## test the BB function with correlation and law school data
 # takes bivarate data and weights (g) and returns a weighted correlation
 weighted.cor <- function(data, g) {
   y <- data[,1]
@@ -112,12 +91,6 @@ weighted.cor <- function(data, g) {
   wc_den <- (sum(g*y^2)-(sum(g*y))^2)*(sum(g*z^2)-(sum(g*z))^2)
   wc_num/sqrt(wc_den)
 }
-
-# test BB using weighted.cor and law school data
-set.seed(1)
-BB_law <- BB(law_school, weighted.cor, B=1000)
-BB_law$se
-qplot(T_boot, data=BB_law$replicates, geom="histogram", binwidth=0.02)
 
 ### Bag of Little Bootstraps
 # data is a vector
@@ -144,61 +117,27 @@ BLB.1d <- function(data, gamma, FUN, ..., s=20, r=100) {
   return(mean(xis))
 }
 
-# Test BLB.1d
-X <- rnorm(5000)
-BLB.1d(X, mean, gamma=0.5)
-
-
-####################################
-# data example 1: gaussian x, no quadratic term
-n=20000
-d=10
-library(MASS)
-set.seed(1)
-X<-mvrnorm(n,mu=rep(0,d),Sigma<-diag(d))
-epsilon<-rnorm(n,mean=0,sd=sqrt(10))
-t_theta<-as.matrix(rep(1,d))
-Y<-X%*%t_theta+epsilon
-data<-cbind(X,Y)
-#for the following parameters i have the confidence interval below, width approximately 0.1 yees!
-
-#n=10000
-#d=10
-
-#[,1]      [,2]
-#[1,] 0.9790562 1.1040837
-#[2,] 0.8610236 0.9806231
-#[3,] 0.8953325 1.0216838
-#[4,] 0.8503939 0.9754930
-#[5,] 0.9155862 1.0457963
-#[6,] 0.8223647 0.9522437
-#[7,] 0.6960141 0.8165108
-#[8,] 0.9162183 1.0368335
-#[9,] 0.9920029 1.1114368
-#[10,] 1.0120414 1.1328796
-###################################
-
-
-
-
-#################################
-#run the blb on simulated data
-
-#accepts data, type of assessment of quality to be estimated (either standard error or confidence interval),
-#s ,r ,gamma and the value of lambda for ridge regression
-
-#FOR THE HELP PAGE
-
-#' function
-#' @param data
-#' @param dfsdf
-#'
-#' @return sdfsdf
+#' BLB function that computes the (1-alpha)\% CI and the standard errors of the parameter estimate components
+#' @title BLB for multivariate data
+#' @param data a matrix or dataframe
+#' @param s number of subsamples
+#' @param r number of resamples per subsample
+#' @param gamma specifies the size of the subsample by b=n^gamma
+#' @param lambda is the penalty in L2 norm for the ridge regression
+#' @param alpha the level of the confidence for CI, respecified to 0.05
+#' @return a list consisting of
+#' \item{output_CI}{average confidence intervals for the parameter estimate components}
+#' \item{output_se}{average standard errors for the parameter estimates components}
 #' @examples
-#' sdfdsf
-#' zfsfsd
+#' n <- 100
+#' d <- 5
+#' X <- mvrnorm(n ,mu = rep(0 ,d ) ,Sigma <- diag( d ) )
+#' epsilon <- rnorm(n ,mean = 0 ,sd = sqrt(10 ) )
+#' t_theta <- as.matrix( rep(1 ,d ) )
+#' Y <- X%*%t_theta + epsilon
+#' data <- cbind(X ,Y )
+#' my_result <- BLB.multi(data, 0,7, 15 ,100 ,10^(-5) )
 BLB.multi <- function(data, gamma=0.7, s=20, r=100, lambda=10^-5, alpha=0.05) {
-
   #CI = confidence interval
   #se = standard error
 
@@ -218,7 +157,6 @@ BLB.multi <- function(data, gamma=0.7, s=20, r=100, lambda=10^-5, alpha=0.05) {
     xis <- array(0 ,dim=c(d ,2 ,s ) )
     output_CI <- matrix(0 ,d ,2 )
     output_se <- matrix(0 ,d ,1 )
-
 
   # subsample from the original data
   for ( i in 1:s ) {
@@ -240,8 +178,6 @@ BLB.multi <- function(data, gamma=0.7, s=20, r=100, lambda=10^-5, alpha=0.05) {
     #if the task is CI compute it for each subsample
     theta[,i] <- rowMeans(re_theta)
     xis[,,i] <- cbind(theta[ ,i ],theta[ ,i ]) + cbind(qnorm(alpha/2) * sd_theta[ ,i ] ,qnorm(1-alpha/2) * sd_theta[ ,i ])
-
-
   }
 
   # average CI across subsamples
@@ -254,40 +190,33 @@ BLB.multi <- function(data, gamma=0.7, s=20, r=100, lambda=10^-5, alpha=0.05) {
   return(list(CI=output_CI, CI_width=CI_width, se=output_se))
 }
 
-# n=20000, d=10
-system.time(BLB.multi_out <- BLB.multi(data, gamma=0.7, s=15, r=100)) #81 sec
-BLB.multi_out
-
-
-
-
-
-#' Implementation on the Bag of Little Bootstraps, which returns the average (across dimensions) confidence interal width of the parameter and the values of
-#' r and s which were chosen adaptively
-#' @title BLB with adaptive tuning parameters
-#' @param  data a matrix or dataframe
-#' @param gam specifies the subsample size b=n^gam
+#' BLB function which returns the average (across dimensions) confidence interal width or the average standard error of the parameter and the values of
+#' r and s which were chosen adaptively within the function
+#' @title BLB with adaptive selection on r and s
+#' @param data a matrix or dataframe
+#' @param gamma specifies the subsample size by b=n^gamma
 #' @param w_s window size for the adaptive selection of s
 #' @param w_r window size for the adaptive selection of r
-#' @param lam specifies the penalty in Ridge regression
+#' @param lambda specifies the L2 penalty in Ridge regression
 #' @param err relative error for the convergence criterion in adaptive selection
-#' @param alpha controls the width of the (1-alpha)\% confidence intervals
+#' @param alpha the level of the confidence which is set to 0.05
 #' @return a list consisting of
-#'  \item{s}{the total number of subsamples from the original dataset}
-#'  \item{r}{the number of resamples for each subsample}
-#'  \item{mean_widths}{the average marginal width of the confidence intervals across dimensions}
+#' \item{s}{the total number of subsamples from the original dataset}
+#' \item{r}{the number of resamples for each subsample}
+#' \item{mean_width}{mean_width the average marginal width of the confidence intervals across dimensions}
+#' \item{mean_se}{mean_se the average standard error across the parameter dimensions}
 #' @examples X <- mvrnorm(100 ,mu = rep(0,2) ,Sigma <- diag(2) )
 #' epsilon <- rnorm(100,mean=0,sd=sqrt(10))
 #' t_theta <- as.matrix( rep(1 ,2 ) )
 #' Y <- X%*%t_theta + epsilon
 #' my_data <- cbind(X ,Y )
-#' my_result <- BLB_adapt(my_data ,0.7 ,3 ,20 ,10^(-5) ,0.05 )
-BLB.adapt <- function( data, gamma, w_s, w_r, lam, err, alpha=0.05) {
+#' my_result <- BLB_adapt(my_data ,0.7 ,3 ,20 ,10^(-5) ,0.05 ,alpha=0.05 )
+BLB.adapt <- function( data, gamma ,w_s ,w_r ,lambda ,err, alpha ) {
   # initialise storage
   if (!is.matrix(data)) data <- as.matrix(data)
   n <- nrow( data )
   d <- ncol( data ) - 1
-  r_max <- 200  #maximum number of resamples of each subsampe (to be found)
+  r_max <- 500  #maximum number of resamples of each subsampe (to be found)
   s_max <- 50 #maximum number of subsamples (to be found)
   b <- round( n^gamma )
   samp_ind <- 0
@@ -306,6 +235,7 @@ BLB.adapt <- function( data, gamma, w_s, w_r, lam, err, alpha=0.05) {
   out_r <- numeric( w_r ) # vectors used in the convergence testing
   vec_of_r <- numeric( s_max ) # vector to store number of resamples for each subsamples
   final_standard_dev <- numeric( d )
+  mean_width<-mean_se<-0
   STATUS_S <- FALSE
   STATUS_R <- FALSE
   s<-0 # initialise number of subsamples
@@ -328,16 +258,15 @@ BLB.adapt <- function( data, gamma, w_s, w_r, lam, err, alpha=0.05) {
       resamp[,,r] <- subsamp[resamp_ind,]
       Y <- resamp[ ,d+1 ,r ]
       X <- resamp[ ,1:d ,r ]
-      re_theta[ ,r ] <- as.matrix(lm.ridge( Y~X ,lambda = lam)$coef )
+      re_theta[ ,r ] <- as.matrix(lm.ridge( Y~X ,lambda = lambda)$coef )
 
       # store values of z which are the se's of the components of the parameter estimate
-      if (r==1) {
-        re_theta_sd[,1]<-c(0,0)
-      }
+      #if (r==1) {
+      #re_theta_sd[,1]<-c(rep(NA,d))
+      #}
 
-      if (r > 1) {
-        re_theta_sd[ ,r ] <- apply(re_theta[,1:r],1,sd)
-      }
+      if (r > 1)  {re_theta_sd[ ,(r-1) ] <- apply(re_theta[,1:r],1,sd)}
+
 
       #beyond the window value test the convegence condition
       if (r > w_r) {
@@ -345,8 +274,8 @@ BLB.adapt <- function( data, gamma, w_s, w_r, lam, err, alpha=0.05) {
 
         #for the past w values we test the value of the relative error
         for ( k in 1:w_r ) {
-          differ_r <- re_theta_sd[ ,r ] - re_theta_sd[ ,( r-k )]
-          diff_vec[ k ] <- sum( abs( differ_r ) / abs( re_theta_sd[ ,r ] ) ) / d
+          differ_r <- re_theta_sd[ ,(r-1) ] - re_theta_sd[ ,( r-1-k )]
+          diff_vec[ k ] <- sum( abs( differ_r ) / abs( re_theta_sd[ ,(r-1) ] ) ) / d
 
           # to chec whether the condition for all the w values is satisfied
           #store 1 if yes and 0 if not
@@ -363,14 +292,15 @@ BLB.adapt <- function( data, gamma, w_s, w_r, lam, err, alpha=0.05) {
 
     }
 
+
     # vector that stores the values of r selected adaptively for each subsample
     vec_of_r[ s ] <- r
 
     # store the parameter estimates for each subsample
     theta[ ,s ] <- rowMeans( re_theta[ ,1:r ] )
     sd_theta[ ,s ] <- apply( re_theta[ ,1:r ] ,1 ,sd )
-    xis[ , ,s ] <- cbind(theta[ ,s ] ,theta[ ,s ] ) + cbind( qnorm(alpha/2) * sd_theta[ ,s ], qnorm(1-alpha/2) * sd_theta[ ,s ])
-    width[ ,s ] <- 2 * qnorm(1-alpha/2) * sd_theta[ ,s ]
+    xis[ , ,s ] <- cbind(theta[ ,s ] ,theta[ ,s ] ) + cbind( -qnorm(1-alpha/2) * sd_theta[ ,s ], qnorm(1-alpha/2) * sd_theta[ ,s ])
+    #width[ ,s ] <- 2 * 1.959964 * sd_theta[ ,s ]
 
     # store values of z which are the se's of the components of parameter estimate for that subsample
     if ( s == 1 ) {
@@ -405,5 +335,8 @@ BLB.adapt <- function( data, gamma, w_s, w_r, lam, err, alpha=0.05) {
   #compute the width of the C's
   widths <- final_xi[ ,2 ] - final_xi[ ,1 ]
   #return the final number of subsamples, resamples or each subsample and average CI width
-  return(list(s=s,r=vec_of_r[1:s] , mean_widths=mean(widths)) )
+
+  return( list(s = s, r = vec_of_r[ 1:s ] , mean_width = mean(widths), mean_se=mean(final_standard_dev) ) )
+
 }
+
