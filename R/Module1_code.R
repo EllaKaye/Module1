@@ -147,3 +147,150 @@ BLB.1d <- function(data, FUN, ..., gamma, s=20, r=100) {
 # Test BLB.1d
 X <- rnorm(5000)
 BLB.1d(X, mean, gamma=0.5)
+
+
+#' BLB function which returns the average (across dimensions) confidence interal width of the parameter and the values of
+#' r and s which were chosen adaptively
+#' @title BLB with adaptive tuning parameters
+#' @param  data a matrix or dataframe
+#' @param gam specifies the subsample size b=n^gam
+#' @param w_s window size for the adaptive selection of s
+#' @param w_r window size for the adaptive selection of r
+#' @param lam specifies the penalty in Ridge regression
+#' @param err relative error for the convergence criterion in adaptive selection
+#' @param alpha controls the width of the (1-alpha)\% confidence intervals
+#' @return a list consisting of
+#'  \item{s}{the total number of subsamples from the original dataset}
+#'  \item{r}{the number of resamples for each subsample}
+#'  \item{mean_widths}{the average marginal width of the confidence intervals across dimensions}
+#' @examples X <- mvrnorm(100 ,mu = rep(0,2) ,Sigma <- diag(2) )
+#' epsilon <- rnorm(100,mean=0,sd=sqrt(10))
+#' t_theta <- as.matrix( rep(1 ,2 ) )
+#' Y <- X%*%t_theta + epsilon
+#' my_data <- cbind(X ,Y )
+#' my_result <- BLB_adapt(my_data ,0.7 ,3 ,20 ,10^(-5) ,0.05 )
+BLB_adapt <- function( data, gam, w_s, w_r, lam, err, alpha=0.05) {
+  # initialise storage
+  if (!is.matrix(data)) data <- as.matrix(data)
+  n <- nrow( data )
+  d <- ncol( data ) - 1
+  r_max <- 200  #maximum number of resamples of each subsampe (to be found)
+  s_max <- 50 #maximum number of subsamples (to be found)
+  b <- round( n^gam )
+  samp_ind <- 0
+  subsamp <- matrix(0 ,b ,d+1 )
+  resamp_ind <- 0 # indictor
+  resamp <- array(0 ,dim = c(n ,d+1 ,r_max ) ) # all the resamples from subsample
+  re_theta <- matrix(0,d,r_max) # theta on resamples
+  re_theta_sd <- matrix(0 ,d ,r_max ) # matrix that stores the sd of the thetas in each resample
+  differ_r <- numeric( d )
+  differ_s <- numeric( d)
+  theta <- matrix(0 ,d ,s_max )
+  sd_theta <- width <- final_sd_theta <- matrix(0 ,d ,s_max ) # final sd of each component
+  xis <- array(0 ,dim = c(d ,2 ,s_max ) ) # final confidence intervals
+  diff_vec <- numeric( w ) # vector for checking convergence
+  out_s <- numeric( w_s ) # vectors used in the convergence testing
+  out_r <- numeric( w_r ) # vectors used in the convergence testing
+  vec_of_r <- numeric( s_max ) # vector to store number of resamples for each subsamples
+  final_standard_dev <- numeric( d )
+  STATUS_S <- FALSE
+  STATUS_R <- FALSE
+  s<-0 # initialise number of subsamples
+
+  #adaptive selection of s
+  while( STATUS_S == FALSE ) {
+    s <- s+1
+
+    #subsample from the original dataset
+    samp_ind <- sample(1:n ,b ,replace = FALSE )
+    subsamp <- data[samp_ind ,]
+    r <- 0
+    STATUS_R <- FALSE
+
+    # adaptive selection of r
+    # for that subsample resample data of size n until the parameter estimate converges
+    while( STATUS_R == FALSE ) {
+      r <- r+1
+      resamp_ind <- sample(1:b ,n ,replace = TRUE )
+      resamp[,,r] <- subsamp[resamp_ind,]
+      Y <- resamp[ ,d+1 ,r ]
+      X <- resamp[ ,1:d ,r ]
+      re_theta[ ,r ] <- as.matrix(lm.ridge( Y~X ,lambda = lam)$coef )
+
+      # store values of z which are the se's of the components of the parameter estimate
+      if (r==1) {
+        re_theta_sd[,1]<-c(0,0)
+      }
+
+      if (r > 1) {
+        re_theta_sd[ ,r ] <- apply(re_theta[,1:r],1,sd)
+      }
+
+      #beyond the window value test the convegence condition
+      if (r > w_r) {
+        out_r<-numeric(w_r)
+
+        #for the past w values we test the value of the relative error
+        for ( k in 1:w_r ) {
+          differ_r <- re_theta_sd[ ,r ] - re_theta_sd[ ,( r-k )]
+          diff_vec[ k ] <- sum( abs( differ_r ) / abs( re_theta_sd[ ,r ] ) ) / d
+
+          # to chec whether the condition for all the w values is satisfied
+          #store 1 if yes and 0 if not
+          if ( (diff_vec[ k ] < err )| (diff_vec[ k ] == err ))
+            out_r[k]<-1
+        }
+
+        #terminate the loop if all the values of the relative error are less than epsilon
+
+        if ( sum( out_r ) == w_r )
+
+          STATUS_R <-TRUE
+      }
+
+    }
+
+    # vector that stores the values of r selected adaptively for each subsample
+    vec_of_r[ s ] <- r
+
+    # store the parameter estimates for each subsample
+    theta[ ,s ] <- rowMeans( re_theta[ ,1:r ] )
+    sd_theta[ ,s ] <- apply( re_theta[ ,1:r ] ,1 ,sd )
+    xis[ , ,s ] <- cbind(theta[ ,s ] ,theta[ ,s ] ) + cbind( qnorm(alpha/2) * sd_theta[ ,s ], qnorm(1-alpha/2) * sd_theta[ ,s ])
+    width[ ,s ] <- 2 * qnorm(1-alpha/2) * sd_theta[ ,s ]
+
+    # store values of z which are the se's of the components of parameter estimate for that subsample
+    if ( s == 1 ) {
+      final_sd_theta[,1]<-sd_theta[,1]
+    }
+
+    if ( s > 1 ) {
+      final_sd_theta[,s]<-apply(sd_theta[,1:s],1,mean)
+    }
+
+    #beyond the window value check the convergence condition
+    if (s > w_s) {
+      out <- numeric( w_s )
+      for ( l in 1:w_s )  {
+        differ_s <- final_sd_theta[ ,s ] - final_sd_theta[ ,(s-l) ]
+        diff_vec[ l ] <- sum(abs(differ_s)/abs(final_sd_theta[ ,s ]))/d
+        if ( (diff_vec[ l ] < err ) | (diff_vec[ l ] == err ))
+          out_s[ l ] <- 1
+      }
+
+      #terminate the loop if all the values of the relative error are less than epsilon
+      if ( sum( out_s ) == w_s)
+        STATUS_S <-TRUE
+
+    }
+  }
+
+  #store the final (average) se of the parameter estimates
+  final_standard_dev <- final_sd_theta[ ,s ]
+  #compute the CI for the parameter estimates across dimensions
+  final_xi <- apply(xis[ , ,1:s ] ,c(1,2) ,mean )
+  #compute the width of the C's
+  widths <- final_xi[ ,2 ] - final_xi[ ,1 ]
+  #return the final number of subsamples, resamples or each subsample and average CI width
+  return(list(s=s,r=vec_of_r[1:s] , mean_widths=mean(widths)) )
+}

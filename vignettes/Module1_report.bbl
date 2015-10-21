@@ -61,6 +61,26 @@
   \field{year}{1983}
 \endentry
 
+\entry{Rubin1981}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Rubin}{R.}%
+     {Donald~B}{D.~B.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{RDB1}
+  \strng{fullhash}{RDB1}
+  \field{labelyear}{1981}
+  \field{sortinit}{R}
+  \field{number}{1}
+  \field{pages}{130\bibrangedash 134}
+  \field{title}{The Bayesian Bootstrap}
+  \field{volume}{9}
+  \field{journaltitle}{The Annals of Statistics}
+  \field{year}{1981}
+\endentry
+
 \lossort
 \endlossort
 

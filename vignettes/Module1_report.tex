@@ -64,10 +64,11 @@
 
 \begin{abstract}
 We present a variety of bootstrap methods in R.
+SAY MORE
 \end{abstract}
 
 \section{Introduction}
-Short intro to all three bootstraps.
+Short intro to all three bootstraps. SAY MORE.
 
 We have developed a package, Bootstrap, with functions to implement the bootstrap, Bayesian bootstrap and bag of little bootstraps. The package can be obtained from GitHub,
 \begin{knitrout}
@@ -156,19 +157,11 @@ The following code gives the BB distribution when the parameter of interest is t
 
 \end{knitrout}
 
-It may be necessary to define your own function for the statistic of interest that can take weights as an argument. By may of example, we show the BB equivalent of the correlation example from the previous section.
+It may be necessary to define your own function for the statistic of interest that can take weights as an argument. By way of example, we show the BB equivalent of the correlation example from the previous section. The function \texttt{cor} in the R base package cannot take weights; the fuction \texttt{weighted.cor} in our Bootstrap package does.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# takes bivarate data and weights (g) and returns a weighted correlation}
-\hlstd{weighted.cor} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{data}\hlstd{,} \hlkwc{g}\hlstd{) \{}
-  \hlstd{y} \hlkwb{<-} \hlstd{data[,}\hlnum{1}\hlstd{]; z} \hlkwb{<-} \hlstd{data[,}\hlnum{2}\hlstd{]}
-  \hlstd{wc_num} \hlkwb{<-} \hlkwd{sum}\hlstd{(g}\hlopt{*}\hlstd{y}\hlopt{*}\hlstd{z)}\hlopt{-}\hlstd{(}\hlkwd{sum}\hlstd{(g}\hlopt{*}\hlstd{y))}\hlopt{*}\hlstd{(}\hlkwd{sum}\hlstd{(g}\hlopt{*}\hlstd{z))}
-  \hlstd{wc_den} \hlkwb{<-} \hlstd{(}\hlkwd{sum}\hlstd{(g}\hlopt{*}\hlstd{y}\hlopt{^}\hlnum{2}\hlstd{)}\hlopt{-}\hlstd{(}\hlkwd{sum}\hlstd{(g}\hlopt{*}\hlstd{y))}\hlopt{^}\hlnum{2}\hlstd{)}\hlopt{*}\hlstd{(}\hlkwd{sum}\hlstd{(g}\hlopt{*}\hlstd{z}\hlopt{^}\hlnum{2}\hlstd{)}\hlopt{-}\hlstd{(}\hlkwd{sum}\hlstd{(g}\hlopt{*}\hlstd{z))}\hlopt{^}\hlnum{2}\hlstd{)}
-  \hlstd{wc_num}\hlopt{/}\hlkwd{sqrt}\hlstd{(wc_den)}
-\hlstd{\}}
-
 \hlkwd{set.seed}\hlstd{(}\hlnum{1}\hlstd{)}
 \hlstd{BB_law} \hlkwb{<-} \hlkwd{BB}\hlstd{(law_school, weighted.cor,} \hlkwc{B}\hlstd{=}\hlnum{1000}\hlstd{)}
 \hlstd{BB_law}\hlopt{$}\hlstd{se}
@@ -184,7 +177,9 @@ It may be necessary to define your own function for the statistic of interest th
 
 \end{knitrout}
 
+Note the similarity of the distributions obtained for the law school data using bootstrap and Bayesian bootstrap resamples. Indeed \textcite{Rubin1981} points out the inferential similarities between these two methods. As a result, whenever the applicability of the Bayesian bootstrap is called into question, we should also be weary of using the standard bootstrap. Typically, the standard bootstrap is seen as widely applicable, because it is completely non-parametric and does not seem to involve any model assumptions. However, both the bootstrap and Bayesian bootstrap operate under the assumption that all possible values of $X$ have been observed. In any application, the researcher will need to ask themselves whether such an assumption is reasonable. Furthermore, the BB and the bootstrap make the assumption that there are no relationships between the parameters, which may not be realistic. In such cases, smoothing the parameters may be appropriate. Although there exist models that incorporate smoothing, inference on the parameters will not be the same and neither the bootstrap nor BB can avoid this.
 
+% However, as \textcite{Rubin1981} discusses, the Bayesian bootstrap \emph{does} make model assumptions, namely that SAY MORE...
 
 
 ISSUES WITH THE BAYESIAN BOOTSTRAP, AND HENCE BOOTSTRAP.

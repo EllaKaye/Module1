@@ -15,10 +15,14 @@
 
 \begin{abstract}
 We present a variety of bootstrap methods in R.
+SAY MORE
 \end{abstract}
 
 \section{Introduction}
-Short intro to all three bootstraps.
+Short intro to all three bootstraps. SAY MORE.
+
+%Boostrap methods encouraged a close relationship between statistical inference and computation and moreover, brought together statistics with computing technology. The latter is very important  has nowadays great importance; firstly because of the increase in the data size and complexity and secondly because of the development of parallel computing architectures. \\ \\
+
 
 We have developed a package, Bootstrap, with functions to implement the bootstrap, Bayesian bootstrap and bag of little bootstraps. The package can be obtained from GitHub,
 <<library, eval=FALSE>>=
@@ -108,37 +112,23 @@ BB_mean$se
 qplot(T_boot, data=BB_mean$replicates, geom="histogram", binwidth=0.05)
 @
 
-It may be necessary to define your own function for the statistic of interest that can take weights as an argument. By may of example, we show the BB equivalent of the correlation example from the previous section.
+It may be necessary to define your own function for the statistic of interest that can take weights as an argument. By way of example, we show the BB equivalent of the correlation example from the previous section. The function \texttt{cor} in the R base package cannot take weights; the fuction \texttt{weighted.cor} in our Bootstrap package does.
 
 <<fig.width=6, fig.height=3>>=
-# takes bivarate data and weights (g) and returns a weighted correlation
-weighted.cor <- function(data, g) {
-  y <- data[,1]; z <- data[,2]
-  wc_num <- sum(g*y*z)-(sum(g*y))*(sum(g*z))
-  wc_den <- (sum(g*y^2)-(sum(g*y))^2)*(sum(g*z^2)-(sum(g*z))^2)
-  wc_num/sqrt(wc_den)
-}
-
 set.seed(1)
 BB_law <- BB(law_school, weighted.cor, B=1000)
 BB_law$se
-qplot(T_boot, data=BB_law$replicates, geom="histogram", binwidth=0.02)
+qplot(T_boot, data=BB_law$replicates, geom="histogram",
+      binwidth=0.02)
 @
 
+Note the similarity of the distributions obtained for the law school data using bootstrap and Bayesian bootstrap resamples. Indeed \textcite{Rubin1981} points out the inferential similarities between these two methods. As a result, whenever the applicability of the Bayesian bootstrap is called into question, we should also be weary of using the standard bootstrap. Typically, the standard bootstrap is seen as widely applicable, because it is completely non-parametric and does not seem to involve any model assumptions. However, both the bootstrap and Bayesian bootstrap operate under the assumption that all possible values of $X$ have been observed. In any application, the researcher will need to ask themselves whether such an assumption is reasonable. Furthermore, the BB and the bootstrap make the assumption that there are no relationships between the parameters, which may not be realistic. In such cases, smoothing the parameters may be appropriate. Although there exist models that incorporate smoothing, inference on the parameters will not be the same and neither the bootstrap nor BB can avoid this.
 
-
-
-ISSUES WITH THE BAYESIAN BOOTSTRAP, AND HENCE BOOTSTRAP.
-
-%Bootstrap methods require
-
-
-
-%Boostrap methods encouraged a close relationship between statistical inference and computation and moreover, brought together statistics with computing technology. The latter is very important  has nowadays great importance; firstly because of the increase in the data size and complexity and secondly because of the development of parallel computing architectures. \\ \\
+% However, as \textcite{Rubin1981} discusses, the Bayesian bootstrap \emph{does} make model assumptions, namely that SAY MORE...
 
 
 \section{Bag of Little Bootstraps}
-The original bootstrap arose around the time when increases in computing power allowed the development of statistical tools that had previously been too computationally expensive. In recent years, there has been an influx of 'big data', alongside the development of parallel computing architectures. CITE KLEINER ET AL have developed a scalable bootstrap for massive data, known as the Bag of Little Bootstraps (BLB). With massive datasets, the bootstrap's need for recomputation on resamples of the same size as the original dataset is problematic. Rather than obtain bootstrap samples from the whole dataset, the BLB breaks down the process as follows:
+The original bootstrap arose around the time when increases in computing power allowed the development of statistical tools that had previously been too computationally expensive. In recent years, there has been an influx of `big data', alongside the development of parallel computing architectures. \textcite{Kleiner2014} have developed a scalable bootstrap for massive data, known as the Bag of Little Bootstraps (BLB). With massive datasets, the bootstrap's need for recomputation on resamples of the same size as the original dataset is problematic. Rather than obtain bootstrap samples from the whole dataset, the BLB breaks down the process as follows:
 
 \begin{enumerate}
 \item Repeatedly ($s$ times) subsample $b(n) < n$ points \emph{without replacement} from the original dataset of size $n$.
@@ -146,15 +136,16 @@ The original bootstrap arose around the time when increases in computing power a
 \begin{enumerate}
 \item Repeatedly ($r$ times) resample $n$ point \emph{with replacement} from the subsample.
 \item Compute $\hat\theta_n^*$ on each resample.
-\item Compute an estimate of $\xi$ based on these multiple resampled realisations of $\hat\theta_n^*$.
+\item Compute an estimate of $\xi$ based on these $r$ realisations of $\hat\theta_n^*$.
 \end{enumerate}
 \item We now have one estimate of $\xi$ per subsample. Output their average as the final estimate of $\xi$ for $\hat\theta_n$.
 \end{enumerate}
 
 %by taking $s$ subsamples of the original dataset, each of size $b$, where typically $b \ll n$. Each of these subsamples is generated from the original dataset WITHOUT replacement.
 
+\textcite{Kleiner2014} recommends taking $b(n) = n^{\gamma}$, where $\gamma \in [0.5,1]$. This procedure dramatically reduces the size of each resample. For example, if $n$ = 1 million and $\gamma=0.6$, the size of the original dataset may be around 1TB, with a bootstrap resample typically occupying approximately 632GB, and a BLB subsample or resample occupying just 4GB.
 
-CITE KLEINER recommends taking $b(n) = n^{\gamma}$, where $\gamma \in [0.5,1]$. This procedure dramatically reduces the size of each resample. For example, if $n$ = 1 million and $\gamma=0.6$, the size of the original dataset is around 1TB, with a bootstrap resample typically occupying approximately 632GB, and a BLB subsample or resample occupying just 4GB.
+The Bootstrap package contains three functions
 <<echo=FALSE>>=
 BLB.1d <- function(data, FUN, ..., gamma, s=20, r=100) {
   n <- length(data)
