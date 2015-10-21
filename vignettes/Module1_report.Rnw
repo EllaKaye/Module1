@@ -147,12 +147,30 @@ The original bootstrap arose around the time when increases in computing power a
 
 The Bootstrap package contains three functions which implement BLB in different cases, \texttt{BLB.1d, BLB.multi} and \texttt{BLB.adapt}. The function \texttt{BLB.1d} implements the simplest version of BLB. It takes as input a 1-dimensional dataset in a vector, $\gamma$, which controls the value of $b$, and a function FUN, which computes the parameter estimate, $\hat\theta_n$. It also takes as arguments $s$ and $r$, which default to 20 and 100 respectively (\textcite{Kleiner2014} demonstates that these values are likely as large as they'll need to be to obtain convergence). The function returns a BLB estimate of $\xi$, which is set as the standard error.
 
-<<>>=
+<<BLB.1d>>=
 X <- rnorm(5000)
 BLB.1d(X, mean, gamma=0.5)
 @
+SAY SOMETHING ABOUT TIME.
 
-In their paper, \textcite{Kleiner2014} conduct a simulation study. They generate data from the true underlying distribution, a linear model $Y_i = \tilde X_i^{\top}\textbf{1}_d + \epsilon_i$, with iid $\tilde X_i \sim MVN(0,\mathbb{I}_d)$ and $\epsilon_i \sim N(0,10)$. The estimator $\hat\theta_n$ consists of a linear least squares regression with a small $L_2$ penalty of $10^{-5}$. To replicate their results, we created the function \texttt{BLB.multi}, which accepts as input an $n \times (d+1)$ dataframe or matrix, where each row is an observation, combining the $d$-dimensional $x$ observation and, in the right-most column, the response, $y$. For each
+In their paper, \textcite{Kleiner2014} conduct a simulation study. They generate data from the true underlying distribution, a linear model $Y_i = \tilde X_i^{\top}\textbf{1}_d + \epsilon_i$, with iid $\tilde X_i \sim MVN(0,\mathbb{I}_d)$ and $\epsilon_i \sim N(0,10)$. The estimator $\hat\theta_n$ consists of a linear least squares regression coefficients, with a small $L_2$ penalty of $\lambda=10^{-5}$. To replicate their results, we created the function \texttt{BLB.multi}, which accepts as input an $n \times (d+1)$ dataframe or matrix, where each row is an observation, combining the $d$-dimensional $x$ observation and, in the right-most column, the response, $y$. The tuning parameters for BLB $\gamma, r$ and $s$ can all be set, as can the tuning parameter $\lambda$ for the penalised regression, and $\alpha$, which controls the width of the confidence intervals. The function returns a list containing the BLB estimate of three quality measures, $\xi^*$: the confidence intervals for each dimension of the estimator, a vector with the width of those intervals, and the standard error of the estimator. As in the paper, we tested the function with $n=20,000$, though we reduced the dimension $d$ from 100 to 10. We chose $\gamma=0.7$, kept $r=100$, and set $s=15$ (which is ample for convergence). This took under under 90 seconds to evaluate.
+
+<<BLB.multi>>=
+# generate the data
+n=1000
+d=2
+library(MASS)
+set.seed(1)
+X <- mvrnorm(n, mu=rep(0,d), Sigma=diag(d))
+epsilon <- rnorm(n, mean=0, sd=sqrt(10))
+t_theta <- as.matrix(rep(1,d))
+Y <- X %*% t_theta + epsilon
+data <- cbind(X,Y)
+
+# apply the function and look at the results
+BLB.multi(data, gamma=0.7, s=15, r=100)
+@
+
 
 
 DISCUSSION OF BLB\\

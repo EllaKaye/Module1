@@ -151,9 +151,10 @@ BLB.1d(X, mean, gamma=0.5)
 
 ####################################
 # data example 1: gaussian x, no quadratic term
-set.seed(1)
-n=10000
+n=20000
 d=10
+library(MASS)
+set.seed(1)
 X<-mvrnorm(n,mu=rep(0,d),Sigma<-diag(d))
 epsilon<-rnorm(n,mean=0,sd=sqrt(10))
 t_theta<-as.matrix(rep(1,d))
@@ -176,18 +177,7 @@ d=10
 [9,] 0.9920029 1.1114368
 [10,] 1.0120414 1.1328796
 ###################################
-#data example 2: gaussian x with quadratic x
-n=10000
-d=5
-fun<-function(x){
-  sum(x^2)
-}
 
-X<-mvrnorm(n,mu=rep(0,d),Sigma<-diag(d))
-epsilon<-rnorm(n,mean=0,sd=sqrt(10))
-t_theta<-as.matrix(rep(1,d))
-Y<-X%*%t_theta+apply(X,1,fun) + epsilon
-data<-cbind(X,Y)
 
 
 
@@ -207,14 +197,14 @@ data<-cbind(X,Y)
 #' @examples
 #' sdfdsf
 #' zfsfsd
-BLB.multi <- function(data, gamma, task = c("CI" ,"se"), s=20, r=100, lambda=10^-5, alpha=0.05) {
+BLB.multi <- function(data, gamma=0.7, s=20, r=100, lambda=10^-5, alpha=0.05) {
 
   #CI = confidence interval
   #se = standard error
 
   n <- nrow(data)
   d <- ncol(data)-1
-  b <- round(n^gam)
+  b <- round(n^gamma)
   samp_ind <- 0
   subsamp <- matrix(0 ,b ,d+1 )
   resamp_ind <- 0
@@ -225,13 +215,10 @@ BLB.multi <- function(data, gamma, task = c("CI" ,"se"), s=20, r=100, lambda=10^
 
   #to store the values for CI's we create an array
   # and for se a matrix
-  if ( task == 'CI') {
     xis <- array(0 ,dim=c(d ,2 ,s ) )
-    output <- matrix(0 ,d ,2 )
-  }
-  else {
-    output <- matrix(0 ,d ,1 )
-  }
+    output_CI <- matrix(0 ,d ,2 )
+    output_se <- matrix(0 ,d ,1 )
+
 
   # subsample from the original data
   for ( i in 1:s ) {
@@ -251,24 +238,25 @@ BLB.multi <- function(data, gamma, task = c("CI" ,"se"), s=20, r=100, lambda=10^
     sd_theta[ ,i ] <- apply(re_theta ,1 ,sd )
 
     #if the task is CI compute it for each subsample
-    if ( task=='CI') {
-      theta[,i] <- rowMeans(re_theta)
-      xis[,,i] <- cbind(theta[ ,i ],theta[ ,i ]) + cbind(qnorm(alpha/2) * sd_theta[ ,i ] ,qnorm(1-alpha/2) * sd_theta[ ,i ])
-    }
+    theta[,i] <- rowMeans(re_theta)
+    xis[,,i] <- cbind(theta[ ,i ],theta[ ,i ]) + cbind(qnorm(alpha/2) * sd_theta[ ,i ] ,qnorm(1-alpha/2) * sd_theta[ ,i ])
+
 
   }
 
-  # if the task is CI, average across subsamples
-  if ( task == 'CI' ) {
-    output <- apply(xis ,c(1 ,2 ) ,mean )
-  }
+  # average CI across subsamples
+  output_CI <- apply(xis ,c(1 ,2 ) ,mean )
+  CI_width <- output_CI[,2]-output_CI[,1]
 
-  # if the task is se average it across subsample
-  if (task == 'se')
-    output <- apply(sd_theta ,1 ,mean )
+  # average se across subsample
+  output_se <- apply(sd_theta ,1 ,mean )
 
-  output
+  return(list(CI=output_CI, CI_width=CI_width, se=output_se))
 }
+
+# n=20000, d=10
+system.time(BLB.multi_out <- BLB.multi(data, gamma=0.7, s=15, r=100)) #81 sec
+BLB.multi_out
 
 my_result <- multi_BLB(data ,'CI' ,15 ,100 ,0.7 ,10^(-5) )
 my_result
