@@ -128,7 +128,7 @@ In their paper, \textcite{Kleiner2014} conduct a simulation study. They generate
 <<BLB.multi>>=
 # generate the data
 n=1000
-d=2
+d=10
 library(MASS)
 set.seed(1)
 X <- mvrnorm(n, mu=rep(0,d), Sigma=diag(d))
@@ -138,7 +138,10 @@ Y <- X %*% t_theta + epsilon
 data <- cbind(X,Y)
 
 # apply the function and look at the results
-BLB.multi(data, gamma=0.7, s=15, r=100)
+system.time(
+  BLB.multi_out <- BLB.multi(data, gamma=0.7, s=15, r=100)
+)
+BLB.multi_out$CI_width
 @
 As \textcite{Kleiner2014} point out, when $n=20,000$ the true average (across dimensions) marginal confidence interval width for the estimated parameter vector is approximately 0.1, so our function gives the expected results.
 

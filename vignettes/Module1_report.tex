@@ -226,7 +226,7 @@ In their paper, \textcite{Kleiner2014} conduct a simulation study. They generate
 \begin{alltt}
 \hlcom{# generate the data}
 \hlstd{n}\hlkwb{=}\hlnum{1000}
-\hlstd{d}\hlkwb{=}\hlnum{2}
+\hlstd{d}\hlkwb{=}\hlnum{10}
 \hlkwd{library}\hlstd{(MASS)}
 \hlkwd{set.seed}\hlstd{(}\hlnum{1}\hlstd{)}
 \hlstd{X} \hlkwb{<-} \hlkwd{mvrnorm}\hlstd{(n,} \hlkwc{mu}\hlstd{=}\hlkwd{rep}\hlstd{(}\hlnum{0}\hlstd{,d),} \hlkwc{Sigma}\hlstd{=}\hlkwd{diag}\hlstd{(d))}
@@ -236,19 +236,38 @@ In their paper, \textcite{Kleiner2014} conduct a simulation study. They generate
 \hlstd{data} \hlkwb{<-} \hlkwd{cbind}\hlstd{(X,Y)}
 
 \hlcom{# apply the function and look at the results}
-\hlkwd{BLB.multi}\hlstd{(data,} \hlkwc{gamma}\hlstd{=}\hlnum{0.7}\hlstd{,} \hlkwc{s}\hlstd{=}\hlnum{15}\hlstd{,} \hlkwc{r}\hlstd{=}\hlnum{100}\hlstd{)}
+\hlkwd{system.time}\hlstd{(}
+  \hlstd{BLB.multi_out} \hlkwb{<-} \hlkwd{BLB.multi}\hlstd{(data,} \hlkwc{gamma}\hlstd{=}\hlnum{0.7}\hlstd{,} \hlkwc{s}\hlstd{=}\hlnum{15}\hlstd{,} \hlkwc{r}\hlstd{=}\hlnum{100}\hlstd{)}
+\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+##    user  system elapsed 
+##   4.824   0.203   5.028
+\end{verbatim}
+\begin{alltt}
+\hlstd{BLB.multi_out}
 \end{alltt}
 \begin{verbatim}
 ## $CI
-##           [,1]     [,2]
-## [1,] 0.8950771 1.271959
-## [2,] 1.0838000 1.497191
+##            [,1]      [,2]
+##  [1,] 0.7447234 1.1395386
+##  [2,] 0.9159413 1.3041599
+##  [3,] 0.6395992 0.9924294
+##  [4,] 1.0650250 1.4445697
+##  [5,] 0.8533737 1.2363316
+##  [6,] 0.8669677 1.2089213
+##  [7,] 0.9434961 1.3085097
+##  [8,] 0.9358243 1.2996644
+##  [9,] 0.7688616 1.1419913
+## [10,] 0.8700360 1.2583149
 ## 
 ## $CI_width
-## [1] 0.3768817 0.4133914
+##  [1] 0.3948153 0.3882186 0.3528302 0.3795447 0.3829580 0.3419536 0.3650136
+##  [8] 0.3638402 0.3731297 0.3882788
 ## 
 ## $se
-## [1] 0.09614507 0.10545892
+##  [1] 0.10072004 0.09903717 0.09000936 0.09682440 0.09769515 0.08723466
+##  [7] 0.09311742 0.09281807 0.09518789 0.09905254
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -269,17 +288,27 @@ The same condition can be used for the selection of $s$. Therefore, both paramet
   \hlstd{BLB.adapt_out} \hlkwb{<-} \hlkwd{BLB.adapt}\hlstd{(data,} \hlkwc{gamma}\hlstd{=}\hlnum{0.7}\hlstd{)}
 \hlstd{)}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in numeric(w): object 'w' not found}}\begin{verbatim}
-## Timing stopped at: 0.007 0.002 0.008
+\begin{verbatim}
+##    user  system elapsed 
+##   1.393   0.094   1.488
 \end{verbatim}
 \begin{alltt}
 \hlstd{BLB.adapt_out}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in eval(expr, envir, enclos): object 'BLB.adapt\_out' not found}}\end{kframe}
+\begin{verbatim}
+## $s
+## [1] 7
+## 
+## $r
+## [1] 47 57 61 46 61 62 47
+## 
+## $mean_width
+## [1] 0.400683
+## 
+## $mean_se
+## [1] 0.1022169
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 
 COMPARE TIMES
