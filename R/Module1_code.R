@@ -258,10 +258,6 @@ BLB.multi <- function(data, gamma=0.7, s=20, r=100, lambda=10^-5, alpha=0.05) {
 system.time(BLB.multi_out <- BLB.multi(data, gamma=0.7, s=15, r=100)) #81 sec
 BLB.multi_out
 
-my_result <- multi_BLB(data ,'CI' ,15 ,100 ,0.7 ,10^(-5) )
-my_result
-widths <- my_result[ ,2] - my_result[ ,1 ]
-mean( widths )
 
 
 
