@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.10.30)  21 OCT 2015 18:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2014.10.30)  21 OCT 2015 22:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -460,82 +460,62 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 63.
 (/usr/local/texlive/2014/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Package color Info: Redefining color shadecolor on input line 78.
+Overfull \hbox (4.32292pt too wide) in paragraph at lines 68--69
+[]\OT1/cmr/m/n/9 The pack-age is avail-able from \OT1/cmtt/m/n/9 https://github
+.com/EllaKaye/Module1\OT1/cmr/m/n/9 . 
+ []
+
+Package color Info: Redefining color shadecolor on input line 76.
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 80.
-Package color Info: Redefining color shadecolor on input line 86.
- [1
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 78.
+[1
 
 {/usr/local/texlive/2014/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Package color Info: Redefining color shadecolor on input line 110.
+Package color Info: Redefining color shadecolor on input line 101.
 
 <figure/chunkname-1.pdf, id=18, 433.62pt x 216.81pt>
 File: figure/chunkname-1.pdf Graphic file (type pdf)
 
 <use figure/chunkname-1.pdf>
-Package pdftex.def Info: figure/chunkname-1.pdf used on input line 133.
+Package pdftex.def Info: figure/chunkname-1.pdf used on input line 126.
 (pdftex.def)             Requested size: 345.0pt x 172.50868pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 133--134
+Overfull \hbox (15.0pt too wide) in paragraph at lines 126--127
 [][] 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 138--139
+[2]
+Underfull \hbox (badness 10000) in paragraph at lines 132--133
 
  []
 
-[2 <./figure/chunkname-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 144.
+Package color Info: Redefining color shadecolor on input line 138.
+[3 <./figure/chunkname-1.pdf>]
+Package color Info: Redefining color shadecolor on input line 155.
 
-Overfull \hbox (27.74675pt too wide) in paragraph at lines 154--154
-[][]\OT1/cmtt/m/n/10 qplot[][](T_boot,[] []data[][]=BB_mean[][]$[][]replicates,
-[] []geom[][]=[][]"histogram"[][],[] []binwidth[][]=[][]0.05[][])[][] 
- []
-
-<figure/unnamed-chunk-2-1.pdf, id=27, 433.62pt x 216.81pt>
-File: figure/unnamed-chunk-2-1.pdf Graphic file (type pdf)
-
-<use figure/unnamed-chunk-2-1.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-2-1.pdf used on input line 157.
-(pdftex.def)             Requested size: 345.0pt x 172.50868pt.
-
-Overfull \hbox (15.0pt too wide) in paragraph at lines 157--158
-[][] 
- []
-
-[3 <./figure/unnamed-chunk-2-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 164.
-
-<figure/unnamed-chunk-3-1.pdf, id=36, 433.62pt x 216.81pt>
+<figure/unnamed-chunk-3-1.pdf, id=31, 433.62pt x 216.81pt>
 File: figure/unnamed-chunk-3-1.pdf Graphic file (type pdf)
 
 <use figure/unnamed-chunk-3-1.pdf>
-Package pdftex.def Info: figure/unnamed-chunk-3-1.pdf used on input line 178.
+Package pdftex.def Info: figure/unnamed-chunk-3-1.pdf used on input line 171.
 (pdftex.def)             Requested size: 345.0pt x 172.50868pt.
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 178--179
+Overfull \hbox (15.0pt too wide) in paragraph at lines 171--172
 [][] 
  []
 
 [4 <./figure/unnamed-chunk-3-1.pdf>]
-Package color Info: Redefining color shadecolor on input line 210.
+Package color Info: Redefining color shadecolor on input line 203.
  [5]
-Package color Info: Redefining color shadecolor on input line 225.
+Package color Info: Redefining color shadecolor on input line 217.
 
-Overfull \hbox (59.24648pt too wide) in paragraph at lines 271--271
-[]\OT1/cmtt/m/n/10 ##  [1] 0.3948153 0.3882186 0.3528302 0.3795447 0.3829580 0.
-3419536 0.3650136[] 
- []
-
-
-Overfull \hbox (38.24666pt too wide) in paragraph at lines 271--271
-[]\OT1/cmtt/m/n/10 ##  [1] 0.10072004 0.09903717 0.09000936 0.09682440 0.097695
-15 0.08723466[] 
+Overfull \hbox (38.24666pt too wide) in paragraph at lines 245--245
+[]\OT1/cmtt/m/n/10 ##  [1] 0.08799343 0.08705251 0.08935000 0.08579360 0.087089
+79 0.09030666[] 
  []
 
 [6]
-Package color Info: Redefining color shadecolor on input line 285.
+Package color Info: Redefining color shadecolor on input line 259.
  [7] [8] (./Module1_report.aux)
 Package logreq Info: Writing requests to 'Module1_report.run.xml'.
 \openout1 = `Module1_report.run.xml'.
@@ -543,12 +523,12 @@ Package logreq Info: Writing requests to 'Module1_report.run.xml'.
  ) 
 Here is how much of TeX's memory you used:
  7542 strings out of 493117
- 119618 string characters out of 6135432
+ 119518 string characters out of 6135432
  284595 words of memory out of 5000000
  10882 multiletter control sequences out of 15000+600000
- 14047 words of font info for 58 fonts, out of 8000000 for 9000
+ 14214 words of font info for 59 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 38i,6n,52p,1411b,893s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,6n,52p,1367b,893s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 ></usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
 </usr/local/texlive/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></
@@ -565,11 +545,12 @@ e/2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive
 /2014/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2
 014/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/20
 14/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/local/texlive/201
-4/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on Module1_report.pdf (8 pages, 214005 bytes).
+4/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/local/texlive/2014/
+texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on Module1_report.pdf (8 pages, 223839 bytes).
 PDF statistics:
- 117 PDF objects out of 1000 (max. 8388607)
- 83 compressed objects within 1 object stream
+ 115 PDF objects out of 1000 (max. 8388607)
+ 82 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
