@@ -16,9 +16,14 @@ BB(data, FUN, ..., B = 1000)
 \value{
 a list consisting of
 \item{replicates}{a matrix containing an estimate for the parameter of interest of each bootstrap replicate}
-\item{se}{the standard error of the parameter estimates}
+\item{se}{the standard error(s) of the parameter estimates}
 }
 \description{
 Bayesian bootstrap
+}
+\examples{
+X <- rnorm(100, 4, 2)
+BB_mean <- BB(X, weighted.mean, B=10000)
+BB_mean$se
 }
 

@@ -162,7 +162,7 @@ It may be necessary to define your own function for the statistic of interest th
 ## [1] 0.1163494
 \end{verbatim}
 \begin{alltt}
-\hlstd{q} \hlkwb{<-} \hlkwd{qplot}\hlstd{(T_boot,} \hlkwc{data}\hlstd{=BB_law}\hlopt{$}\hlstd{replicates,} \hlkwc{geom}\hlstd{=}\hlstr{"histogram"}\hlstd{,}
+\hlstd{q} \hlkwb{<-} \hlkwd{qplot}\hlstd{(BB_law}\hlopt{$}\hlstd{replicates[,}\hlnum{1}\hlstd{],} \hlkwc{data}\hlstd{=BB_law}\hlopt{$}\hlstd{replicates,} \hlkwc{geom}\hlstd{=}\hlstr{"histogram"}\hlstd{,}
       \hlkwc{binwidth}\hlstd{=}\hlnum{0.02}\hlstd{)} \hlopt{+} \hlkwd{xlab}\hlstd{(}\hlstr{"theta_star"}\hlstd{)}
 \hlstd{q} \hlopt{+} \hlkwd{geom_vline}\hlstd{(}\hlkwc{xintercept}\hlstd{=}\hlkwd{cor_df}\hlstd{(law_school),}
                \hlkwc{colour}\hlstd{=}\hlstr{"red"}\hlstd{,} \hlkwc{linetype}\hlstd{=}\hlstr{"dashed"}\hlstd{)}
@@ -234,7 +234,7 @@ In their paper, \textcite{Kleiner2014} conduct a simulation study. They generate
 \end{alltt}
 \begin{verbatim}
 ##    user  system elapsed 
-##  66.092  14.649  80.791
+##  67.126  14.598  81.759
 \end{verbatim}
 \begin{alltt}
 \hlstd{BLB.multi_out}\hlopt{$}\hlstd{CI_width}
@@ -265,7 +265,7 @@ The same condition can be used for the selection of $s$. Therefore, both paramet
 \end{alltt}
 \begin{verbatim}
 ##    user  system elapsed 
-##  16.458   3.922  20.380
+##  17.190   3.715  20.921
 \end{verbatim}
 \begin{alltt}
 \hlstd{BLB.adapt_out}\hlopt{$}\hlstd{s; BLB.adapt_out}\hlopt{$}\hlstd{r}

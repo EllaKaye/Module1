@@ -87,8 +87,8 @@ It may be necessary to define your own function for the statistic of interest th
 set.seed(1)
 BB_law <- BB(law_school, weighted.cor, B=10000)
 BB_law$se
-q <- qplot(T_boot, data=BB_law$replicates, geom="histogram",
-      binwidth=0.02) + xlab("theta_star")
+q <- qplot(BB_law$replicates[,1], data=BB_law$replicates,
+           geom="histogram", binwidth=0.02) + xlab("theta_star")
 q + geom_vline(xintercept=cor_df(law_school),
                colour="red", linetype="dashed")
 @

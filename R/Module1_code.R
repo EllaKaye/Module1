@@ -65,7 +65,11 @@ cor_df <- function(bivar_data) {
 #' @param B the number of bootstrap replications
 #' @return a list consisting of
 #' \item{replicates}{a matrix containing an estimate for the parameter of interest of each bootstrap replicate}
-#' \item{se}{the standard error of the parameter estimates}
+#' \item{se}{the standard error(s) of the parameter estimates}
+#' @examples
+#' X <- rnorm(100, 4, 2)
+#' BB_mean <- BB(X, weighted.mean, B=10000)
+#' BB_mean$se
 BB <- function(data, FUN, ..., B=1000) {
 
   # find number of original samples
@@ -91,9 +95,10 @@ BB <- function(data, FUN, ..., B=1000) {
   }
 
   # T_boot_df allows for plotting of the bootstrap replicates using ggplot2
-  T_boot_df <- data.frame(T_boot=T_boot)
-  return(list(se=sd(T_boot), replicates=T_boot_df))
+  T_boot_df <- as.data.frame(T_boot)
+  return(list(se=apply(T_boot,2,sd), replicates=T_boot_df))
 }
+
 
 #' takes bivarate data and weights (g) and returns a weighted correlation
 #' @title Weighted correlation
