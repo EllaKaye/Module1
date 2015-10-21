@@ -210,8 +210,8 @@ BLB.multi <- function(data, gamma=0.7, s=20, r=100, lambda=10^-5, alpha=0.05) {
 #' t_theta <- as.matrix( rep(1 ,2 ) )
 #' Y <- X%*%t_theta + epsilon
 #' my_data <- cbind(X ,Y )
-#' my_result <- BLB_adapt(my_data ,0.7 ,3 ,20 ,10^(-5) ,0.05 ,alpha=0.05 )
-BLB.adapt <- function( data, gamma ,w_s ,w_r ,lambda ,err, alpha ) {
+#' my_result <- BLB.adapt(my_data, gamma=0.7, w_s=3, w_r=20, lambda=10^(-5), epsilon=0.05, alpha=0.05)
+BLB.adapt <- function(data, gamma=0.7, w_s=3, w_r=20, lambda=10^(-5), epsilon=0.05, alpha=0.05) {
   # initialise storage
   if (!is.matrix(data)) data <- as.matrix(data)
   n <- nrow( data )
@@ -230,7 +230,8 @@ BLB.adapt <- function( data, gamma ,w_s ,w_r ,lambda ,err, alpha ) {
   theta <- matrix(0 ,d ,s_max )
   sd_theta <- width <- final_sd_theta <- matrix(0 ,d ,s_max ) # final sd of each component
   xis <- array(0 ,dim = c(d ,2 ,s_max ) ) # final confidence intervals
-  diff_vec <- numeric( w ) # vector for checking convergence
+  diff_vec_r <- numeric( w_r ) # vector for checking convergence
+  diff_vec_s <- numeric(w_s)
   out_s <- numeric( w_s ) # vectors used in the convergence testing
   out_r <- numeric( w_r ) # vectors used in the convergence testing
   vec_of_r <- numeric( s_max ) # vector to store number of resamples for each subsamples
@@ -275,11 +276,11 @@ BLB.adapt <- function( data, gamma ,w_s ,w_r ,lambda ,err, alpha ) {
         #for the past w values we test the value of the relative error
         for ( k in 1:w_r ) {
           differ_r <- re_theta_sd[ ,(r-1) ] - re_theta_sd[ ,( r-1-k )]
-          diff_vec[ k ] <- sum( abs( differ_r ) / abs( re_theta_sd[ ,(r-1) ] ) ) / d
+          diff_vec_r[ k ] <- sum( abs( differ_r ) / abs( re_theta_sd[ ,(r-1) ] ) ) / d
 
           # to chec whether the condition for all the w values is satisfied
           #store 1 if yes and 0 if not
-          if ( (diff_vec[ k ] < err )| (diff_vec[ k ] == err ))
+          if ( (diff_vec_r[ k ] < epsilon )| (diff_vec_r[ k ] == epsilon ))
             out_r[k]<-1
         }
 
@@ -316,8 +317,8 @@ BLB.adapt <- function( data, gamma ,w_s ,w_r ,lambda ,err, alpha ) {
       out <- numeric( w_s )
       for ( l in 1:w_s )  {
         differ_s <- final_sd_theta[ ,s ] - final_sd_theta[ ,(s-l) ]
-        diff_vec[ l ] <- sum(abs(differ_s)/abs(final_sd_theta[ ,s ]))/d
-        if ( (diff_vec[ l ] < err ) | (diff_vec[ l ] == err ))
+        diff_vec_s[ l ] <- sum(abs(differ_s)/abs(final_sd_theta[ ,s ]))/d
+        if ( (diff_vec_s[ l ] < epsilon ) | (diff_vec_s[ l ] == epsilon ))
           out_s[ l ] <- 1
       }
 
@@ -339,4 +340,5 @@ BLB.adapt <- function( data, gamma ,w_s ,w_r ,lambda ,err, alpha ) {
   return( list(s = s, r = vec_of_r[ 1:s ] , mean_width = mean(widths), mean_se=mean(final_standard_dev) ) )
 
 }
+
 

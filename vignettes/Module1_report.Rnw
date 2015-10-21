@@ -92,6 +92,8 @@ qplot(T_boot, data=BB_law$replicates, geom="histogram",
 
 Note the similarity of the distributions obtained for the law school data using bootstrap and Bayesian bootstrap resamples. Indeed \textcite{Rubin1981} points out the inferential similarities between these two methods. As a result, whenever the applicability of the Bayesian bootstrap is called into question, we should also be weary of using the standard bootstrap. Typically, the standard bootstrap is seen as widely applicable, because it is completely non-parametric and does not seem to involve any model assumptions. However, both the bootstrap and Bayesian bootstrap operate under the assumption that all possible values of $X$ have been observed. In any application, the researcher will need to ask themselves whether such an assumption is reasonable. Furthermore, the BB and the bootstrap make the assumption that there are no relationships between the parameters, which may not be realistic. In such cases, smoothing the parameters may be appropriate. Although there exist models that incorporate smoothing, inference on the parameters will not be the same and neither the bootstrap nor BB can avoid this.
 
+DISCRETE. LARGEST VALUE.
+
 % However, as \textcite{Rubin1981} discusses, the Bayesian bootstrap \emph{does} make model assumptions, namely that SAY MORE...
 
 
@@ -138,8 +140,24 @@ data <- cbind(X,Y)
 # apply the function and look at the results
 BLB.multi(data, gamma=0.7, s=15, r=100)
 @
+As \textcite{Kleiner2014} point out, when $n=20,000$ the true average (across dimensions) marginal confidence interval width for the estimated parameter vector is approximately 0.1, so our function gives the expected results.
 
+\subsection{Adaptive tuning parameter selection}
+In \texttt{BLB.multi}, we need to specify values for $s$, the number of subsamples and $r$, the number of bootstrap replicates per subsample. As \textcite{Kleiner2014} discuss, in practice fairly modest values for these tuning parameters often suffice for convergence, though they will vary depending on the value of $\gamma$, as well as on the parameter $\theta$ being estimated and the choice of quality assessment $\xi$. We wish to use the smallest values of $r$ and $s$ which have sufficiently good statistical properties. In order to minimise the computational cost, we can select $r$ and $s$ adaptively. \textcite{Kleiner2014} suggest the following scheme. Suppose we are currenlty processing subsample $j$. We repeatedly produce resamples, compute the parameter $\theta^{\star}_{n}$ and evaluate $\xi^{\star}_{n}$, until convergence. Convergence is said to occurred when $\xi^{\star}_{n}$ no longer changes significantly after being updated from a new resample.
 
+The exact measure of convergence is given by the following algorithm: Given a series of realisations of $\xi_n^*$, $ z^{(1)} ,..., z^{(t)}\in \mathbb{R}^{d}$; a window $w \in \mathbb{N}$ ($ w<t $); and a target relative error $\epsilon$,  we keep on producing subsamples until the following condition holds: $\forall j \in [1,w]$,
+$ 1/d \sum_{i=1}^{d} | (z_{(i)}^{t-i}-z_{i}^{t} | / |z_{(i)}^{(t)} | \leq \epsilon $.
+
+The same condition can be used for the selection of $s$. Therefore, both parameters can be selected adaptively and in this case $r$ is chosen independently for each subsample. The function \texttt{BLB.adapt} implements BLB with adaptive selection of both $r$ and $s$. It takes data in the same format as \texttt{BLB.multi}, and likewise the parameter of interest is the coefficients of a penalised linear regression. \textcite{Kleiner2014} suggest the values of $w=3$ for the selection of $s$, $w=20$ for the selection of $r$ and $\epsilon=0.05$ for both adaptive procedures. The values of $\gamma, \lambda$ and $\epsilon$ can also be set as arguments, as well as $\alpha$, which controls the width of the confidence intervals. It returns the width of the marginal confidence intervals, along with the final value of $s$, and a vector of the values of $r$ used in each subsample. Here we apply \texttt{BLB.adapt} to the same data as we used above with \texttt{BLB.multi}. Most arguments are set to the default values suggested above.
+
+<<BLB.adapt>>=
+system.time(
+  BLB.adapt_out <- BLB.adapt(data, gamma=0.7)
+)
+BLB.adapt_out
+@
+
+COMPARE TIMES
 
 DISCUSSION OF BLB\\
 Not run in parallel
