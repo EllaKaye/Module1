@@ -70,6 +70,9 @@ SAY MORE
 \section{Introduction}
 Short intro to all three bootstraps. SAY MORE.
 
+%Boostrap methods encouraged a close relationship between statistical inference and computation and moreover, brought together statistics with computing technology. The latter is very important  has nowadays great importance; firstly because of the increase in the data size and complexity and secondly because of the development of parallel computing architectures. \\ \\
+
+
 We have developed a package, Bootstrap, with functions to implement the bootstrap, Bayesian bootstrap and bag of little bootstraps. The package can be obtained from GitHub,
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -170,7 +173,8 @@ It may be necessary to define your own function for the statistic of interest th
 ## [1] 0.1224361
 \end{verbatim}
 \begin{alltt}
-\hlkwd{qplot}\hlstd{(T_boot,} \hlkwc{data}\hlstd{=BB_law}\hlopt{$}\hlstd{replicates,} \hlkwc{geom}\hlstd{=}\hlstr{"histogram"}\hlstd{,} \hlkwc{binwidth}\hlstd{=}\hlnum{0.02}\hlstd{)}
+\hlkwd{qplot}\hlstd{(T_boot,} \hlkwc{data}\hlstd{=BB_law}\hlopt{$}\hlstd{replicates,} \hlkwc{geom}\hlstd{=}\hlstr{"histogram"}\hlstd{,}
+      \hlkwc{binwidth}\hlstd{=}\hlnum{0.02}\hlstd{)}
 \end{alltt}
 \end{kframe}
 \includegraphics[width=\maxwidth]{figure/unnamed-chunk-3-1} 
@@ -182,17 +186,8 @@ Note the similarity of the distributions obtained for the law school data using 
 % However, as \textcite{Rubin1981} discusses, the Bayesian bootstrap \emph{does} make model assumptions, namely that SAY MORE...
 
 
-ISSUES WITH THE BAYESIAN BOOTSTRAP, AND HENCE BOOTSTRAP.
-
-%Bootstrap methods require
-
-
-
-%Boostrap methods encouraged a close relationship between statistical inference and computation and moreover, brought together statistics with computing technology. The latter is very important  has nowadays great importance; firstly because of the increase in the data size and complexity and secondly because of the development of parallel computing architectures. \\ \\
-
-
 \section{Bag of Little Bootstraps}
-The original bootstrap arose around the time when increases in computing power allowed the development of statistical tools that had previously been too computationally expensive. In recent years, there has been an influx of 'big data', alongside the development of parallel computing architectures. CITE KLEINER ET AL have developed a scalable bootstrap for massive data, known as the Bag of Little Bootstraps (BLB). With massive datasets, the bootstrap's need for recomputation on resamples of the same size as the original dataset is problematic. Rather than obtain bootstrap samples from the whole dataset, the BLB breaks down the process as follows:
+The original bootstrap arose around the time when increases in computing power allowed the development of statistical tools that had previously been too computationally expensive. In recent years, there has been an influx of `big data', alongside the development of parallel computing architectures. \textcite{Kleiner2014} have developed a scalable bootstrap for massive data, known as the Bag of Little Bootstraps (BLB). With massive datasets, the bootstrap's need for recomputation on resamples of the same size as the original dataset is problematic. Rather than obtain bootstrap samples from the whole dataset, the BLB breaks down the process as follows:
 
 \begin{enumerate}
 \item Repeatedly ($s$ times) subsample $b(n) < n$ points \emph{without replacement} from the original dataset of size $n$.
@@ -200,18 +195,16 @@ The original bootstrap arose around the time when increases in computing power a
 \begin{enumerate}
 \item Repeatedly ($r$ times) resample $n$ point \emph{with replacement} from the subsample.
 \item Compute $\hat\theta_n^*$ on each resample.
-\item Compute an estimate of $\xi$ based on these multiple resampled realisations of $\hat\theta_n^*$.
+\item Compute an estimate of $\xi$ based on these $r$ realisations of $\hat\theta_n^*$.
 \end{enumerate}
 \item We now have one estimate of $\xi$ per subsample. Output their average as the final estimate of $\xi$ for $\hat\theta_n$.
 \end{enumerate}
 
 %by taking $s$ subsamples of the original dataset, each of size $b$, where typically $b \ll n$. Each of these subsamples is generated from the original dataset WITHOUT replacement.
 
+\textcite{Kleiner2014} recommends taking $b(n) = n^{\gamma}$, where $\gamma \in [0.5,1]$. This procedure dramatically reduces the size of each resample. For example, if $n$ = 1 million and $\gamma=0.6$, the size of the original dataset may be around 1TB, with a bootstrap resample typically occupying approximately 632GB, and a BLB subsample or resample occupying just 4GB.
 
-CITE KLEINER recommends taking $b(n) = n^{\gamma}$, where $\gamma \in [0.5,1]$. This procedure dramatically reduces the size of each resample. For example, if $n$ = 1 million and $\gamma=0.6$, the size of the original dataset is around 1TB, with a bootstrap resample typically occupying approximately 632GB, and a BLB subsample or resample occupying just 4GB.
-
-
-The function BLB.1d implements the simplest version of BLB. It takes as input a 1-dimensional dataset in a vector and a function with computes the statistic of interest, $\theta_n$. It also takes as arguments $s$ and $r$, which default to 20 and 100 respectively (KLEINER demonstates are likely as large as they'll need to be to obtain convergence), and $\gamma$, which controls the value of $b$. The function returns $\xi$, which is set as the standard error.
+The Bootstrap package contains three functions which implement BLB in different cases, \texttt{BLB.1d, BLB.multi} and \texttt{BLB.adapt}. The function \texttt{BLB.1d} implements the simplest version of BLB. It takes as input a 1-dimensional dataset in a vector, $\gamma$, which controls the value of $b$, and a function FUN, which computes the parameter estimate, $\hat\theta_n$. It also takes as arguments $s$ and $r$, which default to 20 and 100 respectively (\textcite{Kleiner2014} demonstates that these values are likely as large as they'll need to be to obtain convergence). The function returns a BLB estimate of $\xi$, which is set as the standard error.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -225,7 +218,10 @@ The function BLB.1d implements the simplest version of BLB. It takes as input a 
 \end{kframe}
 \end{knitrout}
 
-In their paper, CITE KLEINER conduct a simulation study, and here we replicate their results in the Gaussian case. We generate data from the true underlying distribution, a linear model $Y_i = \tilde X_i^{\top}\mathbb{I}_d + \epsilon_i$, with iid $\tilde X_i \sim N(0,1)$ and $\epsilon_i \sim N(0,10)$. The estimator $\hat\theta_n$ consists of a linear least squares regression with a small $L_2$ penalty of $10^{-5}$.
+In their paper, \textcite{Kleiner2014} conduct a simulation study. They generate data from the true underlying distribution, a linear model $Y_i = \tilde X_i^{\top}\textbf{1}_d + \epsilon_i$, with iid $\tilde X_i \sim MVN(0,\mathbb{I}_d)$ and $\epsilon_i \sim N(0,10)$. The estimator $\hat\theta_n$ consists of a linear least squares regression with a small $L_2$ penalty of $10^{-5}$.
+
+and here we replicate their results in the Gaussian case.
+
 
 DISCUSSION OF BLB\\
 Not run in parallel

@@ -125,7 +125,7 @@ qplot(T_boot, data=BB_law$replicates, geom="histogram", binwidth=0.02)
 # s is number of nodes
 # r is number of replicates per node
 # returns the mean of the standard errors of the bootstrap replicates.
-BLB.1d <- function(data, FUN, ..., gamma, s=20, r=100) {
+BLB.1d <- function(data, gamma, FUN, ..., s=20, r=100) {
   n <- length(data)
   b <- round(n^gamma)
   xis <- numeric(s)
@@ -149,7 +149,136 @@ X <- rnorm(5000)
 BLB.1d(X, mean, gamma=0.5)
 
 
-#' BLB function which returns the average (across dimensions) confidence interal width of the parameter and the values of
+####################################
+# data example 1: gaussian x, no quadratic term
+set.seed(1)
+n=10000
+d=10
+X<-mvrnorm(n,mu=rep(0,d),Sigma<-diag(d))
+epsilon<-rnorm(n,mean=0,sd=sqrt(10))
+t_theta<-as.matrix(rep(1,d))
+Y<-X%*%t_theta+epsilon
+data<-cbind(X,Y)
+#for the following parameters i have the confidence interval below, width approximately 0.1 yees!
+
+n=10000
+d=10
+
+[,1]      [,2]
+[1,] 0.9790562 1.1040837
+[2,] 0.8610236 0.9806231
+[3,] 0.8953325 1.0216838
+[4,] 0.8503939 0.9754930
+[5,] 0.9155862 1.0457963
+[6,] 0.8223647 0.9522437
+[7,] 0.6960141 0.8165108
+[8,] 0.9162183 1.0368335
+[9,] 0.9920029 1.1114368
+[10,] 1.0120414 1.1328796
+###################################
+#data example 2: gaussian x with quadratic x
+n=10000
+d=5
+fun<-function(x){
+  sum(x^2)
+}
+
+X<-mvrnorm(n,mu=rep(0,d),Sigma<-diag(d))
+epsilon<-rnorm(n,mean=0,sd=sqrt(10))
+t_theta<-as.matrix(rep(1,d))
+Y<-X%*%t_theta+apply(X,1,fun) + epsilon
+data<-cbind(X,Y)
+
+
+
+#################################
+#run the blb on simulated data
+
+#accepts data, type of assessment of quality to be estimated (either standard error or confidence interval),
+#s ,r ,gamma and the value of lambda for ridge regression
+
+#FOR THE HELP PAGE
+
+#' function
+#' @param data
+#' @param dfsdf
+#'
+#' @return sdfsdf
+#' @examples
+#' sdfdsf
+#' zfsfsd
+BLB.multi <- function(data, gamma, task = c("CI" ,"se"), s=20, r=100, lambda=10^-5, alpha=0.05) {
+
+  #CI = confidence interval
+  #se = standard error
+
+  n <- nrow(data)
+  d <- ncol(data)-1
+  b <- round(n^gam)
+  samp_ind <- 0
+  subsamp <- matrix(0 ,b ,d+1 )
+  resamp_ind <- 0
+  resamp <- array(0 ,dim = c(n ,d+1 ,r ))
+  re_theta <- matrix(0 ,d ,r )
+  theta <- matrix(0 ,d ,s )
+  sd_theta <- matrix(0 ,d ,s )
+
+  #to store the values for CI's we create an array
+  # and for se a matrix
+  if ( task == 'CI') {
+    xis <- array(0 ,dim=c(d ,2 ,s ) )
+    output <- matrix(0 ,d ,2 )
+  }
+  else {
+    output <- matrix(0 ,d ,1 )
+  }
+
+  # subsample from the original data
+  for ( i in 1:s ) {
+    samp_ind <- sample(1:n ,b ,replace=FALSE )
+    subsamp <- data[samp_ind , ]
+
+    #resample from the subsample and compute the parameter estimate
+    for( j in 1:r ) {
+      resamp_ind <- sample(1:b ,n ,replace=TRUE )
+      resamp[,,j] <- subsamp[resamp_ind , ]
+      Y <- resamp[ ,d+1 ,j ]
+      X <- resamp[ ,1:d ,j ]
+      re_theta[ ,j ] <- as.matrix(lm.ridge(Y~X,lambda = lambda )$coef )
+    }
+
+    #compute the se of the parameter estimates for each subsample which is used in both CI and se
+    sd_theta[ ,i ] <- apply(re_theta ,1 ,sd )
+
+    #if the task is CI compute it for each subsample
+    if ( task=='CI') {
+      theta[,i] <- rowMeans(re_theta)
+      xis[,,i] <- cbind(theta[ ,i ],theta[ ,i ]) + cbind(qnorm(alpha/2) * sd_theta[ ,i ] ,qnorm(1-alpha/2) * sd_theta[ ,i ])
+    }
+
+  }
+
+  # if the task is CI, average across subsamples
+  if ( task == 'CI' ) {
+    output <- apply(xis ,c(1 ,2 ) ,mean )
+  }
+
+  # if the task is se average it across subsample
+  if (task == 'se')
+    output <- apply(sd_theta ,1 ,mean )
+
+  output
+}
+
+my_result <- multi_BLB(data ,'CI' ,15 ,100 ,0.7 ,10^(-5) )
+my_result
+widths <- my_result[ ,2] - my_result[ ,1 ]
+mean( widths )
+
+
+
+
+#' Implementation on the Bag of Little Bootstraps, which returns the average (across dimensions) confidence interal width of the parameter and the values of
 #' r and s which were chosen adaptively
 #' @title BLB with adaptive tuning parameters
 #' @param  data a matrix or dataframe
@@ -169,14 +298,14 @@ BLB.1d(X, mean, gamma=0.5)
 #' Y <- X%*%t_theta + epsilon
 #' my_data <- cbind(X ,Y )
 #' my_result <- BLB_adapt(my_data ,0.7 ,3 ,20 ,10^(-5) ,0.05 )
-BLB_adapt <- function( data, gam, w_s, w_r, lam, err, alpha=0.05) {
+BLB.adapt <- function( data, gamma, w_s, w_r, lam, err, alpha=0.05) {
   # initialise storage
   if (!is.matrix(data)) data <- as.matrix(data)
   n <- nrow( data )
   d <- ncol( data ) - 1
   r_max <- 200  #maximum number of resamples of each subsampe (to be found)
   s_max <- 50 #maximum number of subsamples (to be found)
-  b <- round( n^gam )
+  b <- round( n^gamma )
   samp_ind <- 0
   subsamp <- matrix(0 ,b ,d+1 )
   resamp_ind <- 0 # indictor
