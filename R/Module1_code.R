@@ -220,6 +220,7 @@ BLB.multi <- function(data, gamma=0.7, s=20, r=100, lambda=10^(-5), alpha=0.05) 
 
   return(list(CI=output_CI, CI_width=CI_width, se=output_se))
 }
+
 #' BLB function which returns the average (across dimensions) confidence interal width or the average standard error of the parameter and the values of
 #' r and s which were chosen adaptively within the function
 #' @title BLB with adaptive selection on r and s
@@ -243,7 +244,6 @@ BLB.multi <- function(data, gamma=0.7, s=20, r=100, lambda=10^(-5), alpha=0.05) 
 #' Y <- X %*% t_theta + epsilon
 #' my_data <- cbind(X, Y)
 #' my_result <- BLB.adapt(my_data, gamma=0.7, w_s=3, w_r=20, lambda=10^(-5), epsilon=0.05, alpha=0.05)
-
 BLB.adapt <- function(data, gamma=0.7, w_s=3, w_r=20, lambda=10^(-5), epsilon=0.05, alpha=0.05) {
   
   # convert data to matrix, if not already
