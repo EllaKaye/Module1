@@ -235,6 +235,7 @@ BLB.multi <- function(data, gamma=0.7, s=20, r=100, lambda=10^(-5), alpha=0.05) 
 #' \item{s}{the total number of subsamples from the original dataset}
 #' \item{r}{the number of resamples for each subsample}
 #' \item{final_CI}{the final confidence interval for all the components of the parameter estimate }
+#' \item{CI_widths}{the widths of the final confidence interval for all the components of the parameter estimate }
 #' \item{mean_width}{mean_width the average marginal width of the confidence intervals across dimensions}
 #' \item{final_se}{the final standard error for all the componennts of the parameter estimate}
 #' \item{mean_se}{mean_se the average standard error across the parameter dimensions}
@@ -365,5 +366,5 @@ BLB.adapt <- function(data, gamma=0.7, w_s=3, w_r=20, lambda=10^(-5), epsilon=0.
   widths <- final_xi[ ,2 ] - final_xi[ ,1 ]
   
   #return the final number of subsamples, resamples or each subsample and average CI width
-  return( list(s = s, r = vec_of_r[ 1:s ] ,final_CI = final_xi , mean_width = mean(widths), final_se = final_standard_dev , mean_se=mean(final_standard_dev) ) )
+  return( list(s = s, r = vec_of_r[ 1:s ], final_CI = final_xi, CI_widths=widths, mean_width = mean(widths), final_se = final_standard_dev, mean_se=mean(final_standard_dev)))
 }
