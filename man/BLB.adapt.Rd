@@ -20,13 +20,16 @@ BLB.adapt(data, gamma = 0.7, w_s = 3, w_r = 20, lambda = 10^(-5),
 
 \item{alpha}{the level of the confidence which is set to 0.05}
 
-\item{err}{relative error for the convergence criterion in adaptive selection}
+\item{epsilon}{relative error for the convergence criterion in adaptive selection}
 }
 \value{
 a list consisting of
 \item{s}{the total number of subsamples from the original dataset}
 \item{r}{the number of resamples for each subsample}
+\item{final_CI}{the final confidence interval for all the components of the parameter estimate }
+\item{CI_widths}{the widths of the final confidence interval for all the components of the parameter estimate }
 \item{mean_width}{mean_width the average marginal width of the confidence intervals across dimensions}
+\item{final_se}{the final standard error for all the componennts of the parameter estimate}
 \item{mean_se}{mean_se the average standard error across the parameter dimensions}
 }
 \description{
