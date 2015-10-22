@@ -206,7 +206,7 @@ BLB.multi <- function(data, gamma=0.7, s=20, r=100, lambda=10^(-5), alpha=0.05) 
     #compute the se of the parameter estimates for each subsample which is used in both CI and se
     sd_theta[,i] <- apply(re_theta, 1, sd)
 
-    #if the task is CI compute it for each subsample
+    # compute CI for each subsample
     theta[,i] <- rowMeans(re_theta)
     xis[,,i] <- cbind(theta[,i], theta[,i]) + cbind(qnorm(alpha/2) * sd_theta[,i], qnorm(1-alpha/2) * sd_theta[,i])
   }
@@ -359,7 +359,7 @@ BLB.adapt <- function(data, gamma=0.7, w_s=3, w_r=20, lambda=10^(-5), epsilon=0.
   #compute the CI for the parameter estimates across dimensions
   final_xi <- apply(xis[ , ,1:s ] ,c(1,2) ,mean )
 
-  #compute the width of the C's
+  #compute the width of the CIs
   widths <- final_xi[ ,2 ] - final_xi[ ,1 ]
 
   #return the final number of subsamples, resamples or each subsample and average CI width
